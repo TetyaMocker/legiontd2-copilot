@@ -1,0 +1,31 @@
+# Go
+legiontd2-copilot/bin/
+*.exe
+*.test
+*.out
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Project-specific
+legiontd2-copilot/services/perception/perception_pb2*.py
+legiontd2-copilot/perception.pb.go
+legiontd2-copilot/perception_grpc.pb.go
+*.db
+*.sqlite
+debug_screenshots/

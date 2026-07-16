@@ -1,0 +1,10 @@
+# Dev-окружение. Orchestrator (Go/Wails) собирается и запускается нативно под Windows,
+# см. ТЗ DEVOPS2 — GUI-приложение через Docker не имеет смысла.
+# Здесь только Perception Service, где Docker даёт реальную пользу (нативные CV-зависимости).
+services:
+  perception:
+    build: ./services/perception
+    ports:
+      - "50051:50051"
+    # На Windows-хосте с GPU для ONNX Runtime потребуется отдельная настройка
+    # (WSL2 + nvidia-container-toolkit) — актуально с Phase 2.3, не для MVP.

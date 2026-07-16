@@ -1,0 +1,9 @@
+grpcio>=1.66
+grpcio-tools>=1.66
+opencv-python-headless>=4.10
+mss>=9
+numpy>=2.0
+# OCR-движок выбирается в Phase 1.3
+# easyocr>=1.7
+# pytesseract>=0.3
+# onnxruntime>=1.19
