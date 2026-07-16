@@ -68,7 +68,9 @@ func main() {
 				continue
 			}
 
-			eco, err := percClient.ReadEconomy(context.Background())
+			readCtx, readCancel := context.WithTimeout(context.Background(), 16*time.Second)
+			eco, err := percClient.ReadEconomy(readCtx)
+			readCancel()
 			if err != nil {
 				slog.Warn("read economy failed", "error", err)
 				continue

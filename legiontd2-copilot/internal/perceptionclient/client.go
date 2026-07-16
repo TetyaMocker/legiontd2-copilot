@@ -46,7 +46,7 @@ func New(address string) (*Client, error) {
 }
 
 func (c *Client) ReadEconomy(ctx context.Context) (*EconomyState, error) {
-	ctx, cancel := context.WithTimeout(ctx, 3*time.Second)
+	ctx, cancel := context.WithTimeout(ctx, 15*time.Second)
 	defer cancel()
 
 	resp, err := c.client.ReadEconomy(ctx, &pb.ReadEconomyRequest{})

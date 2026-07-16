@@ -27,5 +27,8 @@ legiontd2-copilot/services/perception/perception_pb2*.py
 legiontd2-copilot/perception.pb.go
 legiontd2-copilot/perception_grpc.pb.go
 *.db
+*.db-shm
+*.db-wal
 *.sqlite
+*.log
 debug_screenshots/
