@@ -1,52 +1,118 @@
 # LT2 Copilot — интеллектуальный помощник для Legion TD 2
 
-Полное ТЗ: см. `TZ_LegionTD2_Assistant.md` в корне проекта (выдан отдельно от этого репозитория).
+Desktop-приложение под Windows для рекомендаций во время матча Legion TD 2: расстановка юнитов, покупки/продажи, найм Mercenaries, управление Mythium.
 
-## Статус
+**Статус:** Phase 1.1 — каркас проекта. Код компилируется, структура готова, реализации OCR/CV и UI — заглушки.
 
-Это скелет проекта после Phase 0 (валидация источников данных). Реализации ещё нет —
-только структура, контракты и TODO с привязкой к фазам ТЗ.
+Полное ТЗ: [TZ_LegionTD2_Assistant.md](TZ_LegionTD2_Assistant.md)
 
-**Закрыто в Phase 0:**
-- официальный API v2 подтверждён, схема разобрана (`internal/api/client.go` содержит найденные детали);
-- клиентские логи игры — отсутствуют, исключены из архитектуры;
-- EULA/ToS — прочитан, блокеров для личного использования не найдено;
-- reply-файлов у игры нет.
+---
 
-**Открыто:** проверка Overwolf GEP (не блокирует разработку, см. ТЗ раздел 20).
+## Структура проекта
 
-## Структура
-
-```
-cmd/orchestrator/       — точка входа Go-приложения (ядро: бизнес-логика, хранение, UI)
-internal/api/            — клиент официального Legion TD 2 API v2 (офлайн-контур)
-internal/advisor/        — рекомендации (Phase 1: эвристики, Phase 3: + ML)
-internal/perceptionclient/ — сгенерированный gRPC-клиент к Perception Service (появится после protoc)
-internal/storage/        — SQLite (миграции в /migrations)
-proto/perception.proto   — контракт Go <-> Python
-services/perception/     — Python: захват экрана, OCR, CV, ONNX (единственное место с изображениями)
-migrations/               — SQL-схема runtime-хранилища и кэша справочников API
+```ascii
+cmd/orchestrator/           Точка входа Go-оркестратора
+internal/
+  api/                      HTTP-клиент официального Legion TD 2 API v2
+  advisor/                  Эвристический Advisor (правила, не ML)
+  perceptionclient/         gRPC-клиент к Python-сервису распознавания
+  perceptionclient/pb/      Go-стабы из proto (сгенерированы protoc)
+  storage/                  SQLite-хранилище (миграции встроены)
+migrations/                 SQL-схема (для справки)
+proto/perception.proto      gRPC-контракт Go <-> Python
+services/perception/        Python: захват экрана, OCR, CV, ONNX
 ```
 
-## Как запустить (после реализации Phase 1)
+## Зависимости
+
+- **Go 1.22+** (`go`, установлен)
+- **Python 3.12+** (`python`, установлен)
+- **Protoc** (`protoc`) — для перегенерации gRPC-кода при изменении proto
+
+Go-зависимости (в `go.mod`): `google.golang.org/grpc`, `modernc.org/sqlite`, `google.golang.org/protobuf`  
+Python-зависимости (в `requirements.txt`): `grpcio`, `opencv-python-headless`, `mss`, `numpy`
+
+---
+
+## Как запустить
+
+### 1. Perception Service (Python) — в Docker или напрямую
+
+Через Docker:
+```bash
+docker compose up perception
+```
+Или напрямую (быстрее для разработки):
+```bash
+cd services/perception
+pip install -r requirements.txt
+python server.py
+```
+Сервис слушает на `localhost:50051`.
+
+### 2. Оркестратор (Go)
 
 ```bash
-# 1. Сгенерировать gRPC-код из proto (Go)
-protoc --go_out=. --go-grpc_out=. proto/perception.proto
-
-# 2. Сгенерировать gRPC-код из proto (Python)
-cd services/perception
-python -m grpc_tools.protoc -I../../proto --python_out=. --grpc_python_out=. ../../proto/perception.proto
-
-# 3. Поднять Perception Service
-docker compose up perception
-
-# 4. Собрать и запустить оркестратор
 go run ./cmd/orchestrator
 ```
 
-## Следующий шаг
+Оркестратор:
+- Подключается к SQLite (`lt2_copilot.db` в текущей директории)
+- Пытается соединиться с Perception Service на `localhost:50051`
+- Каждые 2 секунды опрашивает `ReadEconomy` и прогоняет через эвристики Advisor'а
+- Логирует результат в JSON (stdout)
 
-Phase 1.1–1.2 (см. ТЗ, раздел 20): реализовать SQLite-хранилище, HTTP-вызовы в
-`internal/api/client.go` (сейчас `panic("not implemented")`), и минимальный
-`ReadEconomy` в Perception Service поверх любого готового OCR-движка.
+Переменные окружения:
+- `LT2_DB_PATH` — путь к SQLite (по умолч. `lt2_copilot.db`)
+- `LT2_PERCEPTION_ADDR` — адрес Perception Service (по умолч. `localhost:50051`)
+
+### 3. Или всё сразу (Go без Python)
+
+Оркестратор штатно работает при недоступном Perception Service — пишет WARN и ждёт. Можно запустить только Go-часть для проверки сборки:
+```bash
+go build ./...
+```
+
+---
+
+## Что работает сейчас
+
+| Компонент | Статус |
+|-----------|--------|
+| Go-оркестратор (cmd/orchestrator) | ✅ Запускается, логирует, вызывает gRPC |
+| SQLite (internal/storage) | ✅ Миграции, таблицы matches/wave_snapshots/recommendations/units_reference |
+| gRPC-клиент (internal/perceptionclient) | ✅ Соединение, ReadEconomy/HealthCheck |
+| Эвристики (internal/advisor) | ✅ Правила трат/накопления Mythium |
+| API-клиент (internal/api) | ✅ HTTP-вызовы /units/byVersion, /players/matchHistory |
+| Proto-контракт | ✅ Сгенерирован для Go и Python |
+| Perception Service (Python) | ✅ gRPC-сервер, заглушки ReadEconomy/HealthCheck |
+| OCR/CV | ❌ Чистый экран, возвращает 0 (будет в Phase 1.3) |
+| Wails UI | ❌ (будет в Phase 1.5) |
+
+---
+
+## Как перегенерировать gRPC-стабы
+
+Если меняется `proto/perception.proto`:
+
+**Go:**
+```bash
+protoc --go_out=internal/perceptionclient/pb --go_opt=paths=source_relative \
+  --go-grpc_out=internal/perceptionclient/pb --go-grpc_opt=paths=source_relative \
+  --proto_path=proto proto/perception.proto
+```
+
+**Python:**
+```bash
+cd services/perception
+python -m grpc_tools.protoc -I../../proto --python_out=. --grpc_python_out=. ../../proto/perception.proto
+```
+
+---
+
+## План дальнейшей разработки (по ТЗ)
+
+- **Phase 1.3** — OCR: Mythium/HP/таймер/EasyOCR или Tesseract
+- **Phase 1.5** — Wails-окно с минимальным UI
+- **Phase 2** — сбор датасета через API, ML-модель рекомендаций
+- **Phase 3** — прогноз удержания волны, пост-матчевый отчёт
