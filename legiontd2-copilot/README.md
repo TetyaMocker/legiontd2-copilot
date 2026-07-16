@@ -2,7 +2,7 @@
 
 Desktop-приложение под Windows для рекомендаций во время матча Legion TD 2: расстановка юнитов, покупки/продажи, найм Mercenaries, управление Mythium.
 
-**Статус:** Phase 1.1 — каркас проекта. Код компилируется, структура готова, реализации OCR/CV и UI — заглушки.
+**Статус:** Phase 1.3 — OCR Mythium/HP/таймер через EasyOCR, веб-интерфейс.
 
 Полное ТЗ: [TZ_LegionTD2_Assistant.md](TZ_LegionTD2_Assistant.md)
 
@@ -11,67 +11,67 @@ Desktop-приложение под Windows для рекомендаций во
 ## Структура проекта
 
 ```ascii
-cmd/orchestrator/           Точка входа Go-оркестратора
+cmd/orchestrator/             Точка входа Go-оркестратора
 internal/
-  api/                      HTTP-клиент официального Legion TD 2 API v2
-  advisor/                  Эвристический Advisor (правила, не ML)
-  perceptionclient/         gRPC-клиент к Python-сервису распознавания
-  perceptionclient/pb/      Go-стабы из proto (сгенерированы protoc)
-  storage/                  SQLite-хранилище (миграции встроены)
-migrations/                 SQL-схема (для справки)
-proto/perception.proto      gRPC-контракт Go <-> Python
-services/perception/        Python: захват экрана, OCR, CV, ONNX
+  api/                        HTTP-клиент Legion TD 2 API v2
+  advisor/                    Эвристический Advisor (правила трат/накопления)
+  perceptionclient/           gRPC-клиент к Python-сервису распознавания
+  perceptionclient/pb/        Go-стабы из proto
+  storage/                    SQLite-хранилище
+  webserver/                  HTTP-сервер + встроенный веб-интерфейс
+  webserver/static/           HTML/CSS/JS фронтенд
+migrations/                   SQL-схема (справочно)
+proto/perception.proto        gRPC-контракт Go <-> Python
+services/perception/          Python: захват экрана, EasyOCR, gRPC-сервер
 ```
 
 ## Зависимости
 
-- **Go 1.22+** (`go`, установлен)
-- **Python 3.12+** (`python`, установлен)
-- **Protoc** (`protoc`) — для перегенерации gRPC-кода при изменении proto
-
-Go-зависимости (в `go.mod`): `google.golang.org/grpc`, `modernc.org/sqlite`, `google.golang.org/protobuf`  
-Python-зависимости (в `requirements.txt`): `grpcio`, `opencv-python-headless`, `mss`, `numpy`
+- **Go 1.22+** — `google.golang.org/grpc`, `modernc.org/sqlite`, `google.golang.org/protobuf`
+- **Python 3.12+** — `easyocr`, `opencv-python-headless`, `mss`, `grpcio`, `numpy`
+- **Protoc** — для перегенерации gRPC-стабов при изменении proto (не обязательно для запуска)
 
 ---
 
-## Как запустить
+## Быстрый старт
 
-### 1. Perception Service (Python) — в Docker или напрямую
+### 1. Установить Python-зависимости
 
-Через Docker:
-```bash
-docker compose up perception
-```
-Или напрямую (быстрее для разработки):
 ```bash
 cd services/perception
 pip install -r requirements.txt
-python server.py
 ```
-Сервис слушает на `localhost:50051`.
 
-### 2. Оркестратор (Go)
+### 2. Запустить Perception Service (OCR)
 
 ```bash
-go run ./cmd/orchestrator
+python server.py
+# слушает localhost:50051
 ```
 
-Оркестратор:
-- Подключается к SQLite (`lt2_copilot.db` в текущей директории)
-- Пытается соединиться с Perception Service на `localhost:50051`
-- Каждые 2 секунды опрашивает `ReadEconomy` и прогоняет через эвристики Advisor'а
-- Логирует результат в JSON (stdout)
+> **Важно:** EasyOCR при первом запуске скачает модель (~100 МБ).  
+> Регионы захвата настроены на 1920×1080 — для другого разрешения отредактируй `self.regions` в `server.py`.
+
+### 3. Запустить оркестратор с веб-интерфейсом
+
+```bash
+# Терминал 2
+go run ./cmd/orchestrator
+# веб-интерфейс на http://localhost:8080
+```
 
 Переменные окружения:
-- `LT2_DB_PATH` — путь к SQLite (по умолч. `lt2_copilot.db`)
-- `LT2_PERCEPTION_ADDR` — адрес Perception Service (по умолч. `localhost:50051`)
+| Переменная | По умолчанию | Описание |
+|-----------|-------------|---------|
+| `LT2_DB_PATH` | `lt2_copilot.db` | Путь к SQLite |
+| `LT2_PERCEPTION_ADDR` | `localhost:50051` | Адрес Perception Service |
+| `LT2_WEB_ADDR` | `:8080` | Порт веб-интерфейса |
+| `LT2_API_KEY` | — | API-ключ Legion TD 2 для `/units` и `/games` |
 
-### 3. Или всё сразу (Go без Python)
+### 4. Открыть веб-интерфейс
 
-Оркестратор штатно работает при недоступном Perception Service — пишет WARN и ждёт. Можно запустить только Go-часть для проверки сборки:
-```bash
-go build ./...
-```
+Перейди в браузере на **http://localhost:8080**  
+(рядом с запущенной игрой на втором мониторе или в оконном режиме)
 
 ---
 
@@ -79,15 +79,14 @@ go build ./...
 
 | Компонент | Статус |
 |-----------|--------|
-| Go-оркестратор (cmd/orchestrator) | ✅ Запускается, логирует, вызывает gRPC |
-| SQLite (internal/storage) | ✅ Миграции, таблицы matches/wave_snapshots/recommendations/units_reference |
-| gRPC-клиент (internal/perceptionclient) | ✅ Соединение, ReadEconomy/HealthCheck |
+| Go-оркестратор | ✅ Запускается, логирует, вызывает gRPC, веб-сервер |
+| SQLite (internal/storage) | ✅ Миграции, таблицы готовы |
+| gRPC-клиент (internal/perceptionclient) | ✅ ReadEconomy/HealthCheck |
 | Эвристики (internal/advisor) | ✅ Правила трат/накопления Mythium |
 | API-клиент (internal/api) | ✅ HTTP-вызовы /units/byVersion, /players/matchHistory |
-| Proto-контракт | ✅ Сгенерирован для Go и Python |
-| Perception Service (Python) | ✅ gRPC-сервер, заглушки ReadEconomy/HealthCheck |
-| OCR/CV | ❌ Чистый экран, возвращает 0 (будет в Phase 1.3) |
-| Wails UI | ❌ (будет в Phase 1.5) |
+| Perception Service (Python) | ✅ EasyOCR, захват mss, gRPC-сервер |
+| Веб-интерфейс (internal/webserver) | ✅ HTML/CSS/JS, автообновление, /api/state |
+| Wails UI | ⏳ Факультативно (замена веб-интерфейса) |
 
 ---
 
@@ -112,7 +111,5 @@ python -m grpc_tools.protoc -I../../proto --python_out=. --grpc_python_out=. ../
 
 ## План дальнейшей разработки (по ТЗ)
 
-- **Phase 1.3** — OCR: Mythium/HP/таймер/EasyOCR или Tesseract
-- **Phase 1.5** — Wails-окно с минимальным UI
-- **Phase 2** — сбор датасета через API, ML-модель рекомендаций
+- **Phase 2** — сбор датасета через API, ML-модель рекомендаций расстановки
 - **Phase 3** — прогноз удержания волны, пост-матчевый отчёт
