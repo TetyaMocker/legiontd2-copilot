@@ -10,8 +10,9 @@ import (
 
 	"github.com/yourname/legiontd2-copilot/internal/advisor"
 	"github.com/yourname/legiontd2-copilot/internal/api"
+	"github.com/yourname/legiontd2-copilot/internal/http"
 	"github.com/yourname/legiontd2-copilot/internal/storage"
-	"github.com/yourname/legiontd2-copilot/internal/webserver"
+	"github.com/yourname/legiontd2-copilot/internal/ws"
 )
 
 func main() {
@@ -38,33 +39,23 @@ func main() {
 		slog.Info("api client configured")
 	}
 
-	adv := advisor.NewHeuristicAdvisor()
-	state := &webserver.AppState{}
-	webserver.Start(state, webAddr)
+	hub := ws.NewHub()
+	httpserver.New(webAddr, hub)
 
-	slog.Info("web UI + ingestion API", "url", "http://localhost"+webAddr)
+	slog.Info("server ready", "url", "http://localhost"+webAddr)
 
-	recTicker := time.NewTicker(2 * time.Second)
-	defer recTicker.Stop()
+	ticker := time.NewTicker(2 * time.Second)
+	defer ticker.Stop()
 
-	slog.Info("orchestrator running")
 	for {
 		select {
 		case <-ctx.Done():
 			slog.Info("shutting down")
 			return
-		case <-recTicker.C:
-			snap := state.Snapshot()
-			eco := advisor.EconomySnapshot{
-				Mythium:          snap.Mythium,
-				Income:           snap.Income,
-				WaveNumber:       snap.Wave,
-				WaveTimerSeconds: snap.WaveTimer,
-				KingHPPercent:    snap.KingHP,
-				Confidence:       float32(snap.Confidence),
-			}
-			recs := adv.Recommend(eco)
-			state.SetRecs(recs)
+		case <-ticker.C:
+			state := hub.GetState()
+			recs := advisor.Recommend(state)
+			hub.SetRecs(recs)
 		}
 	}
 }

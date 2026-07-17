@@ -1,66 +1,45 @@
 package advisor
 
-type EconomySnapshot struct {
-	Mythium           int
-	Income            int
-	WaveNumber        int
-	WaveTimerSeconds  int
-	KingHPPercent     int
-	AllyKingHPPercent int
-	Confidence        float32
-}
+import (
+	"github.com/yourname/legiontd2-copilot/internal/ws"
+)
 
-type Recommendation struct {
-	Kind        string
-	Explanation string
-}
+func Recommend(state ws.GameState) []ws.Recommendation {
+	var recs []ws.Recommendation
 
-type Advisor interface {
-	Recommend(EconomySnapshot) []Recommendation
-}
-
-type HeuristicAdvisor struct{}
-
-func NewHeuristicAdvisor() *HeuristicAdvisor {
-	return &HeuristicAdvisor{}
-}
-
-func (h *HeuristicAdvisor) Recommend(snap EconomySnapshot) []Recommendation {
-	var recs []Recommendation
-
-	if snap.Confidence < 0.3 {
-		recs = append(recs, Recommendation{
-			Kind:        "save",
-			Explanation: "Распознавание ненадёжно — рекомендации временно отключены",
-		})
+	if state.Wave == 0 && state.Mythium == 0 {
 		return recs
 	}
 
-	if snap.Mythium > 120 && snap.WaveTimerSeconds <= 10 {
-		recs = append(recs, Recommendation{
-			Kind:        "spend",
-			Explanation: "До волны осталось мало времени — потрать Mythium на юнитов/апгрейды",
+	if state.WaveTimer <= 10 && state.Mythium > 80 {
+		recs = append(recs, ws.Recommendation{
+			Action:   "spend_mythium",
+			Message:  "До волны осталось мало времени — потрать Mythium на наёмников",
+			Priority: 3,
 		})
 	}
 
-	if snap.Mythium > 200 && snap.WaveTimerSeconds > 15 {
-		recs = append(recs, Recommendation{
-			Kind:        "save",
-			Explanation: "Рано тратить — копи Mythium для отправки наёмников на волне противника",
+	if state.Mythium > 120 && state.WaveTimer > 15 {
+		recs = append(recs, ws.Recommendation{
+			Action:   "save_mythium",
+			Message:  "Копи Mythium — отправь наёмников на волне противника",
+			Priority: 2,
 		})
 	}
 
-	if snap.KingHPPercent < 30 && snap.Mythium > 60 {
-		recs = append(recs, Recommendation{
-			Kind:        "spend",
-			Explanation: "HP короля низкое — инвестируй в защиту",
+	if state.KingHP < 30 && state.Mythium > 60 {
+		recs = append(recs, ws.Recommendation{
+			Action:   "upgrade_king",
+			Message:  "HP короля низкое — улучши короля",
+			Priority: 5,
 		})
 	}
 
 	if len(recs) == 0 {
-		recs = append(recs, Recommendation{
-			Kind:        "save",
-			Explanation: "Ситуация стабильная — продолжай копить",
+		recs = append(recs, ws.Recommendation{
+			Action:   "hold",
+			Message:  "Ситуация стабильная — продолжай копить",
+			Priority: 1,
 		})
 	}
 
