@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "patch_version": "any",
+  "resolution": "1920x1080",
+  "confidence_threshold": 0.7,
+  "ocr_timeout_ms": 5000,
+  "capture": {
+    "mythium":   { "x": 520, "y": 50, "w": 120, "h": 35, "label": "Mythium", "range": [0, 99999] },
+    "income":    { "x": 515, "y": 108, "w": 80, "h": 28, "label": "Income", "range": [0, 9999] },
+    "wave":      { "x": 850, "y": 90, "w": 160, "h": 35, "label": "Wave number", "range": [1, 30] },
+    "timer":     { "x": 890, "y": 58, "w": 100, "h": 30, "label": "Wave timer", "range": [0, 600] },
+    "king_hp":   { "x": 1410, "y": 85, "w": 70, "h": 35, "label": "King HP", "range": [0, 100] }
+  },
+  "tracking": {
+    "re_scan_interval_ms": 3000,
+    "change_threshold": 0.15,
+    "max_cache_age_ms": 10000
+  }
+}

@@ -10,7 +10,6 @@ import (
 
 	"github.com/yourname/legiontd2-copilot/internal/advisor"
 	"github.com/yourname/legiontd2-copilot/internal/api"
-	"github.com/yourname/legiontd2-copilot/internal/perceptionclient"
 	"github.com/yourname/legiontd2-copilot/internal/storage"
 	"github.com/yourname/legiontd2-copilot/internal/webserver"
 )
@@ -23,7 +22,6 @@ func main() {
 	defer cancel()
 
 	dbPath := env("LT2_DB_PATH", "lt2_copilot.db")
-	perceptionAddr := env("LT2_PERCEPTION_ADDR", "localhost:50051")
 	webAddr := env("LT2_WEB_ADDR", ":8080")
 	apiKey := os.Getenv("LT2_API_KEY")
 
@@ -40,22 +38,14 @@ func main() {
 		slog.Info("api client configured")
 	}
 
-	percClient, err := perceptionclient.New(perceptionAddr)
-	if err != nil {
-		slog.Warn("perception service not available, running in offline mode", "error", err)
-	}
-	if percClient != nil {
-		defer percClient.Close()
-	}
-
 	adv := advisor.NewHeuristicAdvisor()
 	state := &webserver.AppState{}
 	webserver.Start(state, webAddr)
 
-	slog.Info("web UI available", "url", "http://localhost"+webAddr)
+	slog.Info("web UI + ingestion API", "url", "http://localhost"+webAddr)
 
-	ticker := time.NewTicker(2 * time.Second)
-	defer ticker.Stop()
+	recTicker := time.NewTicker(2 * time.Second)
+	defer recTicker.Stop()
 
 	slog.Info("orchestrator running")
 	for {
@@ -63,31 +53,18 @@ func main() {
 		case <-ctx.Done():
 			slog.Info("shutting down")
 			return
-		case <-ticker.C:
-			if percClient == nil {
-				continue
+		case <-recTicker.C:
+			snap := state.Snapshot()
+			eco := advisor.EconomySnapshot{
+				Mythium:          snap.Mythium,
+				Income:           snap.Income,
+				WaveNumber:       snap.Wave,
+				WaveTimerSeconds: snap.WaveTimer,
+				KingHPPercent:    snap.KingHP,
+				Confidence:       float32(snap.Confidence),
 			}
-
-			readCtx, readCancel := context.WithTimeout(context.Background(), 16*time.Second)
-			eco, err := percClient.ReadEconomy(readCtx)
-			readCancel()
-			if err != nil {
-				slog.Warn("read economy failed", "error", err)
-				continue
-			}
-
-			snap := advisor.EconomySnapshot{
-				Mythium:           eco.Mythium,
-				Income:            eco.Income,
-				WaveNumber:        eco.WaveNumber,
-				WaveTimerSeconds:  eco.WaveTimerSec,
-				KingHPPercent:     eco.KingHPPercent,
-				AllyKingHPPercent: eco.AllyKingHP,
-				Confidence:        eco.Confidence,
-			}
-
-			recs := adv.Recommend(snap)
-			state.Update(snap, recs)
+			recs := adv.Recommend(eco)
+			state.SetRecs(recs)
 		}
 	}
 }

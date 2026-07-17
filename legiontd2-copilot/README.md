@@ -2,34 +2,50 @@
 
 Desktop-приложение под Windows для рекомендаций во время матча Legion TD 2: расстановка юнитов, покупки/продажи, найм Mercenaries, управление Mythium.
 
-**Статус:** Phase 1.3 — OCR Mythium/HP/таймер через EasyOCR, веб-интерфейс.
+**Статус:** Phase 1.4 — Переход на REST+JSON-конфиги, подготовка Wails UI.
 
 Полное ТЗ: [TZ_LegionTD2_Assistant.md](TZ_LegionTD2_Assistant.md)
 
 ---
 
+## Архитектура (новая, актуальная)
+
+```
+┌─────────────────┐     POST /api/ingest     ┌──────────────────┐     fetch /api/state     ┌─────────┐
+│  Perception      │ ──────────────────────▶  │  Go Orchestrator │ ◀──────────────────────  │ Browser │
+│  Service         │   {"mythium":120,...}    │  (internal/web-  │      JSON + Recs         │  UI     │
+│  (Python/OCR)    │                          │   server + ad-   │                          │         │
+└─────────────────┘                          │   visor + conf)  │                          └─────────┘
+                                             └──────────────────┘
+                                                       │
+                                                       ▼
+                                             ┌──────────────────┐      ┌──────────────────┐
+                                             │  SQLite Storage  │      │  LT2 API Client   │
+                                             │  (матчи/логи)    │      │  (офиц. API v2)  │
+                                             └──────────────────┘      └──────────────────┘
+```
+
 ## Структура проекта
 
-```ascii
-cmd/orchestrator/             Точка входа Go-оркестратора
+```
+cmd/orchestrator/            Точка входа Go-оркестратора
+config/
+  regions.json               JSON-конфиг регионов OCR (паттерн)
 internal/
-  api/                        HTTP-клиент Legion TD 2 API v2
-  advisor/                    Эвристический Advisor (правила трат/накопления)
-  perceptionclient/           gRPC-клиент к Python-сервису распознавания
-  perceptionclient/pb/        Go-стабы из proto
-  storage/                    SQLite-хранилище
-  webserver/                  HTTP-сервер + встроенный веб-интерфейс
-  webserver/static/           HTML/CSS/JS фронтенд
-migrations/                   SQL-схема (справочно)
-proto/perception.proto        gRPC-контракт Go <-> Python
-services/perception/          Python: захват экрана, EasyOCR, gRPC-сервер
+  config/                    Загрузчик JSON-конфигов
+  api/                       HTTP-клиент Legion TD 2 API v2
+  advisor/                   Эвристический Advisor (правила трат/накопления)
+  storage/                   SQLite-хранилище
+  webserver/                 HTTP-сервер + встроенный веб-интерфейс
+  webserver/static/          HTML/CSS/JS фронтенд (текущий)
+frontend/                    Wails UI (будущий in-app интерфейс)
+services/perception/         Python: захват экрана, EasyOCR, HTTP POST
 ```
 
 ## Зависимости
 
-- **Go 1.22+** — `google.golang.org/grpc`, `modernc.org/sqlite`, `google.golang.org/protobuf`
-- **Python 3.12+** — `easyocr`, `opencv-python-headless`, `mss`, `grpcio`, `numpy`
-- **Protoc** — для перегенерации gRPC-стабов при изменении proto (не обязательно для запуска)
+- **Go 1.22+** — `modernc.org/sqlite` (pure-Go, без CGO)
+- **Python 3.12+** — `easyocr`, `opencv-python-headless`, `mss`, `numpy`
 
 ---
 
@@ -46,11 +62,11 @@ pip install -r requirements.txt
 
 ```bash
 python server.py
-# слушает localhost:50051
+# отправляет POST на http://localhost:8080/api/ingest
 ```
 
 > **Важно:** EasyOCR при первом запуске скачает модель (~100 МБ).  
-> Регионы захвата настроены на 1920×1080 — для другого разрешения отредактируй `self.regions` в `server.py`.
+> Регионы захвата настраиваются в `config/regions.json` (1920×1080).
 
 ### 3. Запустить оркестратор с веб-интерфейсом
 
@@ -64,8 +80,7 @@ go run ./cmd/orchestrator
 | Переменная | По умолчанию | Описание |
 |-----------|-------------|---------|
 | `LT2_DB_PATH` | `lt2_copilot.db` | Путь к SQLite |
-| `LT2_PERCEPTION_ADDR` | `localhost:50051` | Адрес Perception Service |
-| `LT2_WEB_ADDR` | `:8080` | Порт веб-интерфейса |
+| `LT2_WEB_ADDR` | `:8080` | Порт (API + веб-интерфейс) |
 | `LT2_API_KEY` | — | API-ключ Legion TD 2 для `/units` и `/games` |
 
 ### 4. Открыть веб-интерфейс
@@ -79,37 +94,22 @@ go run ./cmd/orchestrator
 
 | Компонент | Статус |
 |-----------|--------|
-| Go-оркестратор | ✅ Запускается, логирует, вызывает gRPC, веб-сервер |
+| Go-оркестратор | ✅ Запускается, принимает POST-данные, веб-сервер |
 | SQLite (internal/storage) | ✅ Миграции, таблицы готовы |
-| gRPC-клиент (internal/perceptionclient) | ✅ ReadEconomy/HealthCheck |
+| REST-приём OCR (POST /api/ingest) | ✅ Замена gRPC |
 | Эвристики (internal/advisor) | ✅ Правила трат/накопления Mythium |
 | API-клиент (internal/api) | ✅ HTTP-вызовы /units/byVersion, /players/matchHistory |
-| Perception Service (Python) | ✅ EasyOCR, захват mss, gRPC-сервер |
+| Perception Service (Python) | ✅ EasyOCR, захват mss, HTTP POST |
 | Веб-интерфейс (internal/webserver) | ✅ HTML/CSS/JS, автообновление, /api/state |
-| Wails UI | ⏳ Факультативно (замена веб-интерфейса) |
+| JSON-конфиги (config/regions.json) | ✅ Регионы OCR вынесены в конфиг |
+| Трекинг OCR (Tracker в Python) | ✅ Кеширование, контроль частоты сканов |
+| Wails UI | ⏳ Факультативно (замена веб-интерфейса, нужен gcc+node) |
 
 ---
 
-## Как перегенерировать gRPC-стабы
-
-Если меняется `proto/perception.proto`:
-
-**Go:**
-```bash
-protoc --go_out=internal/perceptionclient/pb --go_opt=paths=source_relative \
-  --go-grpc_out=internal/perceptionclient/pb --go-grpc_opt=paths=source_relative \
-  --proto_path=proto proto/perception.proto
-```
-
-**Python:**
-```bash
-cd services/perception
-python -m grpc_tools.protoc -I../../proto --python_out=. --grpc_python_out=. ../../proto/perception.proto
-```
-
----
-
-## План дальнейшей разработки (по ТЗ)
+## План дальнейшей разработки
 
 - **Phase 2** — сбор датасета через API, ML-модель рекомендаций расстановки
 - **Phase 3** — прогноз удержания волны, пост-матчевый отчёт
+- **Overwolf overlay** — вывод рекомендаций прямо поверх игры (после подтверждения Game ID в Overwolf GEP)
+- **Wails in-app UI** — замена браузера на нативное окно (требует MinGW-w64 + Node.js)
