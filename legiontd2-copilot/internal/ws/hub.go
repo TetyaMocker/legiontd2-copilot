@@ -81,6 +81,16 @@ type GameState struct {
 	TownActions  []HandUnit        `json:"townActions"`
 	PlayerScores []PlayerScore     `json:"playerScores"`
 	SelectedUnit *SelectedUnit     `json:"selectedUnit,omitempty"`
+
+	ActionSample     interface{} `json:"_actionSample,omitempty"`
+	MercActionSample interface{} `json:"_mercActionSample,omitempty"`
+
+	ScoreboardInfo  []interface{} `json:"scoreboardInfo,omitempty"`
+	TeamGoldLeft    int           `json:"teamGoldLeft,omitempty"`
+	TeamGoldRight   int           `json:"teamGoldRight,omitempty"`
+	KingUpgradesLeft  interface{} `json:"kingUpgradesLeft,omitempty"`
+	KingUpgradesRight interface{} `json:"kingUpgradesRight,omitempty"`
+	Moneylender       interface{} `json:"moneylender,omitempty"`
 }
 
 type Hub struct {

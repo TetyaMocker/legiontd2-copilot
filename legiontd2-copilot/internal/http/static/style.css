@@ -43,36 +43,39 @@ h1 { font-size: 22px; font-weight: 600; color: #58a6ff; }
 .unit-list { display: flex; flex-direction: column; gap: 3px; max-height: 300px; overflow-y: auto; }
 .unit-card {
   display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 8px;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 6px 8px;
   background: #21262d;
   border: 1px solid #30363d;
   border-radius: 6px;
-  font-size: 12px;
 }
-.unit-card.dim { opacity: 0.45; }
-.u-name { font-weight: 600; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.u-info { color: #8b949e; font-size: 10px; white-space: nowrap; }
-.action-btn {
-  padding: 2px 10px;
-  border: 1px solid #58a6ff;
-  background: #1f3a5f;
-  color: #58a6ff;
+.unit-card.dim { opacity: 0.5; }
+.u-icon {
+  width: 32px; height: 32px;
+  object-fit: contain;
+  flex-shrink: 0;
   border-radius: 4px;
-  cursor: pointer;
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  white-space: nowrap;
+  background: #161b22;
 }
-.action-btn:disabled {
-  border-color: #30363d;
-  background: #21262d;
-  color: #484f58;
-  cursor: default;
+.u-hotkey {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px; height: 26px;
+  background: #30363d;
+  border: 1px solid #484f58;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #e6edf3;
+  flex-shrink: 0;
+  margin-top: 1px;
 }
-.action-btn:not(:disabled):hover { background: #264773; }
+.u-info-wrap { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.u-name { font-weight: 700; font-size: 14px; color: #f0f6fc; line-height: 1.3; }
+.u-meta { font-size: 11px; color: #8b949e; }
+.u-reason { font-size: 11px; color: #f85149; font-weight: 500; margin-top: 1px; }
 .advice {
   background: #161b22;
   border: 1px solid #30363d;
@@ -113,3 +116,38 @@ h1 { font-size: 22px; font-weight: 600; color: #58a6ff; }
 .badge-hold { background:#30363d !important; color:#8b949e !important; }
 .badge-fight { background:#da3633 !important; color:#fff !important; }
 .advice li.dim { color:#8b949e; }
+
+.debug-panel {
+  margin-top: 12px;
+  background: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  padding: 8px;
+}
+.debug-panel summary {
+  cursor: pointer;
+  font-size: 12px;
+  color: #8b949e;
+  user-select: none;
+}
+.copy-btn {
+  float: right;
+  font-size: 11px;
+  padding: 2px 8px;
+  background: #21262d;
+  border: 1px solid #484f58;
+  border-radius: 4px;
+  color: #e6edf3;
+  cursor: pointer;
+}
+.copy-btn:hover { background: #30363d; }
+.debug-panel pre {
+  margin-top: 8px;
+  font-size: 11px;
+  line-height: 1.4;
+  color: #8b949e;
+  white-space: pre-wrap;
+  word-break: break-all;
+  max-height: 400px;
+  overflow-y: auto;
+}

@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LT2 Copilot</title>
+<title>LTD2 Assistant</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="container">
   <header>
-    <h1>LT2 Copilot</h1>
-    <span id="status" style="font-size:12px;color:#8b949e" id="status">●</span>
+    <h1>LTD2 Assistant</h1>
+    <span id="status" style="font-size:12px;color:#8b949e">● Статус: ожидание</span>
   </header>
 
   <div class="grid">
@@ -25,7 +25,7 @@
 
   <div class="panel-row">
     <div class="panel">
-      <h2>Рука (доступные юниты)</h2>
+      <h2>Доступные юниты</h2>
       <div id="handUnits" class="unit-list"></div>
     </div>
     <div class="panel">
@@ -38,6 +38,12 @@
     <h2>Рекомендации</h2>
     <ul id="recommendations"></ul>
   </div>
+
+  <details class="debug-panel">
+    <summary>🐛 Сырые данные (debug)</summary>
+    <button id="copyDebug" class="copy-btn">Копировать</button>
+    <pre id="rawDebug">(ожидание данных)</pre>
+  </details>
 </div>
 <script src="app.js"></script>
 </body>

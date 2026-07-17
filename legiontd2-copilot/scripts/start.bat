@@ -1,5 +1,5 @@
 @echo off
-cd /d "%~dp0"
+cd /d "%~dp0.."
 echo Starting LT2 Copilot...
 start "LT2 Copilot" bin\lt2-copilot.exe
 echo Web UI: http://localhost:8080
