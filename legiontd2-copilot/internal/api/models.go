@@ -1,13 +1,15 @@
 package api
 
+import "encoding/json"
+
 type Player struct {
 	ID   string `json:"_id"`
 	Name string `json:"name"`
 }
 
 type Stats struct {
-	PlayerID  string `json:"playerId"`
-	PlayerName string `json:"playerName"`
+	PlayerID   string `json:"_id"`
+	PlayerName string `json:"playerName,omitempty"`
 	OverallElo int    `json:"overallElo"`
 	ClassicElo int    `json:"classicElo"`
 	Wins       int    `json:"wins"`
@@ -16,16 +18,16 @@ type Stats struct {
 }
 
 type Match struct {
-	ID          string              `json:"_id"`
-	Version     string              `json:"version"`
-	Date        string              `json:"date"`
-	QueueType   string              `json:"queueType"`
-	EndingWave  int                 `json:"endingWave"`
-	GameLength  int                 `json:"gameLength"`
-	GameElo     int                 `json:"gameElo"`
-	PlayerCount int                 `json:"playerCount"`
-	HumanCount  int                 `json:"humanCount"`
-	PlayersData []PlayerMatchDetails `json:"playersData,omitempty"`
+	ID          string          `json:"_id"`
+	Version     string          `json:"version"`
+	Date        string          `json:"date"`
+	QueueType   string          `json:"queueType"`
+	EndingWave  int             `json:"endingWave"`
+	GameLength  int             `json:"gameLength"`
+	GameElo     int             `json:"gameElo"`
+	PlayerCount int             `json:"playerCount"`
+	HumanCount  int             `json:"humanCount"`
+	PlayersData json.RawMessage `json:"playersData,omitempty"`
 }
 
 type PlayerMatchDetails struct {
@@ -33,24 +35,34 @@ type PlayerMatchDetails struct {
 	PlayerName  string   `json:"playerName"`
 	PlayerSlot  int      `json:"playerSlot"`
 	Legion      string   `json:"legion"`
-	Workers     int      `json:"workers"`
+	Workers     float64  `json:"workers"`
 	Value       int      `json:"value"`
 	GameResult  string   `json:"gameResult"`
 	OverallElo  int      `json:"overallElo"`
 	ClassicElo  int      `json:"classicElo"`
+	EloChange   int      `json:"eloChange"`
 	Fighters    string   `json:"fighters"`
 	Mercenaries string   `json:"mercenaries"`
 	FirstWaveFighters string `json:"firstWaveFighters"`
 	Rolls       string   `json:"rolls"`
 
-	NetWorthPerWave  []int    `json:"netWorthPerWave"`
-	WorkersPerWave   []int    `json:"workersPerWave"`
-	IncomePerWave    []int    `json:"incomePerWave"`
-	BuildPerWave     []string `json:"buildPerWave"`
-	LeaksPerWave     []string `json:"leaksPerWave"`
-	MercenariesSentPerWave  []any  `json:"mercenariesSentPerWave"`
-	MercenariesReceivedPerWave []any `json:"mercenariesReceivedPerWave"`
-	KingUpgradesPerWave  []string `json:"kingUpgradesPerWave"`
+	NetWorthPerWave  json.RawMessage `json:"netWorthPerWave"`
+	ValuePerWave     json.RawMessage `json:"valuePerWave"`
+	WorkersPerWave   json.RawMessage `json:"workersPerWave"`
+	IncomePerWave    json.RawMessage `json:"incomePerWave"`
+	MercenariesSentPerWave  json.RawMessage `json:"mercenariesSentPerWave"`
+	MercenariesReceivedPerWave json.RawMessage `json:"mercenariesReceivedPerWave"`
+	LeaksPerWave     json.RawMessage `json:"leaksPerWave"`
+	BuildPerWave     json.RawMessage `json:"buildPerWave"`
+	KingUpgradesPerWave     json.RawMessage `json:"kingUpgradesPerWave"`
+	OpponentKingUpgradesPerWave json.RawMessage `json:"opponentKingUpgradesPerWave"`
+	ChosenSpell      string `json:"chosenSpell"`
+	MvpScore         int    `json:"mvpScore"`
+	LeakValue        int    `json:"leakValue"`
+	LeaksCaughtValue int    `json:"leaksCaughtValue"`
+	PartySize        int    `json:"partySize"`
+	StayedUntilEnd   bool   `json:"stayedUntilEnd"`
+	Doubledown       bool   `json:"doubledown"`
 }
 
 type UnitStats struct {
@@ -79,4 +91,9 @@ type Wave struct {
 type Legion struct {
 	ID   string `json:"_id"`
 	Name string `json:"name"`
+}
+
+type GamesResponse struct {
+	Value []Match `json:"value"`
+	Count int     `json:"Count"`
 }

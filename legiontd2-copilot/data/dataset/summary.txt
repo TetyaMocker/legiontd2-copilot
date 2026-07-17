@@ -1,0 +1,7 @@
+Dataset Summary
+==============
+
+Games collected: 3000
+Player entries: 11899
+Wins: 5715, Losses: 5603
+Win rate: 50.5%

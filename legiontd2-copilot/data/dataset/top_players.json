@@ -1,0 +1,1602 @@
+[
+  {
+    "_id": "149140A590E6A854",
+    "overallElo": 3215,
+    "classicElo": -680,
+    "wins": 9313,
+    "losses": 6720,
+    "gamesPlayed": 16460
+  },
+  {
+    "_id": "B8BF330588012CC7",
+    "overallElo": 3201,
+    "classicElo": 1971,
+    "wins": 10750,
+    "losses": 7824,
+    "gamesPlayed": 18581
+  },
+  {
+    "_id": "AAE00D75416E8B7A",
+    "overallElo": 3105,
+    "classicElo": -2041,
+    "wins": 1621,
+    "losses": 1390,
+    "gamesPlayed": 3013
+  },
+  {
+    "_id": "B2A15AB5E8AFD77B",
+    "overallElo": 3049,
+    "classicElo": 2560,
+    "wins": 4125,
+    "losses": 3223,
+    "gamesPlayed": 7349
+  },
+  {
+    "_id": "67FECE10FECB327D",
+    "overallElo": 3024,
+    "classicElo": 0,
+    "wins": 9067,
+    "losses": 6298,
+    "gamesPlayed": 15515
+  },
+  {
+    "_id": "5BC63540921489C2",
+    "overallElo": 3014,
+    "classicElo": 2656,
+    "wins": 7367,
+    "losses": 5603,
+    "gamesPlayed": 13112
+  },
+  {
+    "_id": "FC99B0A61AFD6FC8",
+    "overallElo": 3011,
+    "classicElo": 1945,
+    "wins": 5265,
+    "losses": 4699,
+    "gamesPlayed": 9969
+  },
+  {
+    "_id": "5E15D00BEBB45D22",
+    "overallElo": 2993,
+    "classicElo": -1309,
+    "wins": 3917,
+    "losses": 3465,
+    "gamesPlayed": 7383
+  },
+  {
+    "_id": "3C4B058096DDA06E",
+    "overallElo": 2985,
+    "classicElo": 11222,
+    "wins": 4000,
+    "losses": 2704,
+    "gamesPlayed": 6712
+  },
+  {
+    "_id": "EA080CDB2087AEF",
+    "overallElo": 2980,
+    "classicElo": -1122,
+    "wins": 5317,
+    "losses": 4695,
+    "gamesPlayed": 10121
+  },
+  {
+    "_id": "A3A7F7014B322528",
+    "overallElo": 2977,
+    "classicElo": 2086,
+    "wins": 3923,
+    "losses": 3377,
+    "gamesPlayed": 7301
+  },
+  {
+    "_id": "98EB388ED84463F2",
+    "overallElo": 2971,
+    "classicElo": 4281,
+    "wins": 3009,
+    "losses": 2465,
+    "gamesPlayed": 5474
+  },
+  {
+    "_id": "456B5F29778561",
+    "overallElo": 2959,
+    "classicElo": 2514,
+    "wins": 5639,
+    "losses": 3589,
+    "gamesPlayed": 9228
+  },
+  {
+    "_id": "F7B454981ECF35A5",
+    "overallElo": 2951,
+    "classicElo": 2645,
+    "wins": 5777,
+    "losses": 4080,
+    "gamesPlayed": 9858
+  },
+  {
+    "_id": "AD14381094561084",
+    "overallElo": 2937,
+    "classicElo": 2265,
+    "wins": 4670,
+    "losses": 4072,
+    "gamesPlayed": 8745
+  },
+  {
+    "_id": "B82A39DDEAFB347C",
+    "overallElo": 2913,
+    "classicElo": 2629,
+    "wins": 6995,
+    "losses": 4754,
+    "gamesPlayed": 11883
+  },
+  {
+    "_id": "889EDE1444921386",
+    "overallElo": 2902,
+    "classicElo": -1481,
+    "wins": 3370,
+    "losses": 2892,
+    "gamesPlayed": 6262
+  },
+  {
+    "_id": "392CCFBEB18C3545",
+    "overallElo": 2892,
+    "classicElo": 2663,
+    "wins": 1004,
+    "losses": 650,
+    "gamesPlayed": 1655
+  },
+  {
+    "_id": "CC4B78AD016E6D97",
+    "overallElo": 2871,
+    "classicElo": 4366,
+    "wins": 1689,
+    "losses": 1619,
+    "gamesPlayed": 3313
+  },
+  {
+    "_id": "CE8F67B0F5F369DC",
+    "overallElo": 2870,
+    "classicElo": 2872,
+    "wins": 1523,
+    "losses": 998,
+    "gamesPlayed": 2523
+  },
+  {
+    "_id": "BD7A334434EBB99A",
+    "overallElo": 2864,
+    "classicElo": 0,
+    "wins": 498,
+    "losses": 321,
+    "gamesPlayed": 819
+  },
+  {
+    "_id": "E8A032B5D21A3056",
+    "overallElo": 2864,
+    "classicElo": 3026,
+    "wins": 2529,
+    "losses": 2024,
+    "gamesPlayed": 4554
+  },
+  {
+    "_id": "D9065833A667EDBE",
+    "overallElo": 2853,
+    "classicElo": 3148,
+    "wins": 2716,
+    "losses": 2512,
+    "gamesPlayed": 5230
+  },
+  {
+    "_id": "6D68EEACAB2E64D5",
+    "overallElo": 2850,
+    "classicElo": 2347,
+    "wins": 2240,
+    "losses": 1783,
+    "gamesPlayed": 4023
+  },
+  {
+    "_id": "8795EFA61DF171EF",
+    "overallElo": 2847,
+    "classicElo": 1766,
+    "wins": 2382,
+    "losses": 2132,
+    "gamesPlayed": 4520
+  },
+  {
+    "_id": "CBD5AC812392E95E",
+    "overallElo": 2846,
+    "classicElo": 2851,
+    "wins": 6412,
+    "losses": 4833,
+    "gamesPlayed": 11363
+  },
+  {
+    "_id": "87E1F693B2FD5BAD",
+    "overallElo": 2845,
+    "classicElo": 2309,
+    "wins": 415,
+    "losses": 290,
+    "gamesPlayed": 705
+  },
+  {
+    "_id": "C47F6E4CC661628B",
+    "overallElo": 2838,
+    "classicElo": 3149,
+    "wins": 3331,
+    "losses": 2919,
+    "gamesPlayed": 6254
+  },
+  {
+    "_id": "332C20D9C9005AAE",
+    "overallElo": 2833,
+    "classicElo": 2079,
+    "wins": 6281,
+    "losses": 5462,
+    "gamesPlayed": 11852
+  },
+  {
+    "_id": "89BF97E6F2FEB1B7",
+    "overallElo": 2831,
+    "classicElo": 64,
+    "wins": 7818,
+    "losses": 7263,
+    "gamesPlayed": 15088
+  },
+  {
+    "_id": "5D2085C40D755C7D",
+    "overallElo": 2827,
+    "classicElo": 274,
+    "wins": 2457,
+    "losses": 2185,
+    "gamesPlayed": 4642
+  },
+  {
+    "_id": "D82214DEC12AFDA5",
+    "overallElo": 2827,
+    "classicElo": 4262,
+    "wins": 2537,
+    "losses": 1880,
+    "gamesPlayed": 4425
+  },
+  {
+    "_id": "A258CD6A67077802",
+    "overallElo": 2825,
+    "classicElo": -2000,
+    "wins": 1530,
+    "losses": 1306,
+    "gamesPlayed": 2837
+  },
+  {
+    "_id": "C54F9A1DA16A7EB7",
+    "overallElo": 2824,
+    "classicElo": 1757,
+    "wins": 4843,
+    "losses": 4350,
+    "gamesPlayed": 9209
+  },
+  {
+    "_id": "F1F59C7EF66C9B6F",
+    "overallElo": 2809,
+    "classicElo": -1320,
+    "wins": 741,
+    "losses": 476,
+    "gamesPlayed": 1220
+  },
+  {
+    "_id": "154EFED56FA01D26",
+    "overallElo": 2808,
+    "classicElo": 9312,
+    "wins": 1382,
+    "losses": 1081,
+    "gamesPlayed": 2463
+  },
+  {
+    "_id": "E506904F63F17FF",
+    "overallElo": 2808,
+    "classicElo": 3010,
+    "wins": 7594,
+    "losses": 5371,
+    "gamesPlayed": 13165
+  },
+  {
+    "_id": "7A6F93667DB2C382",
+    "overallElo": 2804,
+    "classicElo": 3223,
+    "wins": 5539,
+    "losses": 5021,
+    "gamesPlayed": 10563
+  },
+  {
+    "_id": "B268E7D4A65E48D1",
+    "overallElo": 2803,
+    "classicElo": 1036,
+    "wins": 365,
+    "losses": 175,
+    "gamesPlayed": 541
+  },
+  {
+    "_id": "3379AA7A097EDE6E",
+    "overallElo": 2801,
+    "classicElo": 0,
+    "wins": 188,
+    "losses": 82,
+    "gamesPlayed": 270
+  },
+  {
+    "_id": "EDD736D7B66D4ADC",
+    "overallElo": 2801,
+    "classicElo": -40,
+    "wins": 1475,
+    "losses": 1184,
+    "gamesPlayed": 2668
+  },
+  {
+    "_id": "A04220240602CD",
+    "overallElo": 2800,
+    "classicElo": 2941,
+    "wins": 4309,
+    "losses": 3323,
+    "gamesPlayed": 7638
+  },
+  {
+    "_id": "AAE3867960EB3B0D",
+    "overallElo": 2800,
+    "classicElo": 2519,
+    "wins": 2005,
+    "losses": 1731,
+    "gamesPlayed": 3778
+  },
+  {
+    "_id": "8ACE3D255FE0F581",
+    "overallElo": 2799,
+    "classicElo": 845,
+    "wins": 3865,
+    "losses": 3473,
+    "gamesPlayed": 7338
+  },
+  {
+    "_id": "42952A660F5D0674",
+    "overallElo": 2799,
+    "classicElo": 6671,
+    "wins": 3801,
+    "losses": 3094,
+    "gamesPlayed": 6897
+  },
+  {
+    "_id": "8E219F106D043AD2",
+    "overallElo": 2773,
+    "classicElo": 11282,
+    "wins": 2006,
+    "losses": 1483,
+    "gamesPlayed": 3494
+  },
+  {
+    "_id": "9A9E6DD4E91D5F41",
+    "overallElo": 2773,
+    "classicElo": 4486,
+    "wins": 4722,
+    "losses": 3935,
+    "gamesPlayed": 8822
+  },
+  {
+    "_id": "A795C124ACFF2B9",
+    "overallElo": 2771,
+    "classicElo": 6055,
+    "wins": 7696,
+    "losses": 6837,
+    "gamesPlayed": 14736
+  },
+  {
+    "_id": "E5517599DB9A06C9",
+    "overallElo": 2763,
+    "classicElo": 9107,
+    "wins": 1824,
+    "losses": 1483,
+    "gamesPlayed": 3316
+  },
+  {
+    "_id": "3F61F595F9DF8BC9",
+    "overallElo": 2759,
+    "classicElo": 1686,
+    "wins": 6774,
+    "losses": 4696,
+    "gamesPlayed": 11511
+  },
+  {
+    "_id": "DFCF23AE7340D045",
+    "overallElo": 2755,
+    "classicElo": 4016,
+    "wins": 2758,
+    "losses": 1993,
+    "gamesPlayed": 4752
+  },
+  {
+    "_id": "E0BA7EA43EFFE229",
+    "overallElo": 2754,
+    "classicElo": 0,
+    "wins": 309,
+    "losses": 219,
+    "gamesPlayed": 529
+  },
+  {
+    "_id": "F9BC1F0DA760B241",
+    "overallElo": 2751,
+    "classicElo": 896,
+    "wins": 10139,
+    "losses": 9236,
+    "gamesPlayed": 19744
+  },
+  {
+    "_id": "299E92DAA8AB71E6",
+    "overallElo": 2737,
+    "classicElo": 982,
+    "wins": 3015,
+    "losses": 2527,
+    "gamesPlayed": 5542
+  },
+  {
+    "_id": "DD9B0DE494B98AB",
+    "overallElo": 2730,
+    "classicElo": 6878,
+    "wins": 4239,
+    "losses": 3740,
+    "gamesPlayed": 7981
+  },
+  {
+    "_id": "AE92C4A450A7A6CC",
+    "overallElo": 2724,
+    "classicElo": 0,
+    "wins": 599,
+    "losses": 462,
+    "gamesPlayed": 1061
+  },
+  {
+    "_id": "E23BFBABD2A8FB72",
+    "overallElo": 2717,
+    "classicElo": -1191,
+    "wins": 713,
+    "losses": 487,
+    "gamesPlayed": 1202
+  },
+  {
+    "_id": "3197AEE2406ED03C",
+    "overallElo": 2709,
+    "classicElo": 2951,
+    "wins": 2168,
+    "losses": 1888,
+    "gamesPlayed": 4058
+  },
+  {
+    "_id": "B75E26A39507B151",
+    "overallElo": 2704,
+    "classicElo": 2874,
+    "wins": 6501,
+    "losses": 4398,
+    "gamesPlayed": 11044
+  },
+  {
+    "_id": "7A04B469C48772E3",
+    "overallElo": 2701,
+    "classicElo": 451,
+    "wins": 1393,
+    "losses": 1183,
+    "gamesPlayed": 2578
+  },
+  {
+    "_id": "99926F46E1D450D6",
+    "overallElo": 2699,
+    "classicElo": 3310,
+    "wins": 4256,
+    "losses": 3674,
+    "gamesPlayed": 8022
+  },
+  {
+    "_id": "A5692AD16B7331CE",
+    "overallElo": 2696,
+    "classicElo": 0,
+    "wins": 9132,
+    "losses": 8547,
+    "gamesPlayed": 17685
+  },
+  {
+    "_id": "5DAFE2D1888A8DE4",
+    "overallElo": 2695,
+    "classicElo": 1659,
+    "wins": 9036,
+    "losses": 8795,
+    "gamesPlayed": 17921
+  },
+  {
+    "_id": "7C566C589C2C9069",
+    "overallElo": 2692,
+    "classicElo": 2438,
+    "wins": 3071,
+    "losses": 3398,
+    "gamesPlayed": 6506
+  },
+  {
+    "_id": "9D972392DC5EFBC4",
+    "overallElo": 2690,
+    "classicElo": 1979,
+    "wins": 4619,
+    "losses": 3660,
+    "gamesPlayed": 8383
+  },
+  {
+    "_id": "C618E832079A4A07",
+    "overallElo": 2685,
+    "classicElo": 9973,
+    "wins": 5380,
+    "losses": 4718,
+    "gamesPlayed": 10100
+  },
+  {
+    "_id": "A1F22248EB6964FB",
+    "overallElo": 2682,
+    "classicElo": 2948,
+    "wins": 4762,
+    "losses": 4197,
+    "gamesPlayed": 8990
+  },
+  {
+    "_id": "8BC3CBD6D0F2CE99",
+    "overallElo": 2681,
+    "classicElo": 7152,
+    "wins": 4683,
+    "losses": 3451,
+    "gamesPlayed": 8146
+  },
+  {
+    "_id": "75D3DA21E65A6B",
+    "overallElo": 2680,
+    "classicElo": 6444,
+    "wins": 8065,
+    "losses": 6116,
+    "gamesPlayed": 14384
+  },
+  {
+    "_id": "6159EB1235371CC3",
+    "overallElo": 2675,
+    "classicElo": -996,
+    "wins": 2666,
+    "losses": 2302,
+    "gamesPlayed": 4973
+  },
+  {
+    "_id": "89275CF9B1692375",
+    "overallElo": 2675,
+    "classicElo": 5553,
+    "wins": 2651,
+    "losses": 2139,
+    "gamesPlayed": 4844
+  },
+  {
+    "_id": "1F0E16EA046602D8",
+    "overallElo": 2667,
+    "classicElo": 958,
+    "wins": 4875,
+    "losses": 4632,
+    "gamesPlayed": 9508
+  },
+  {
+    "_id": "DBECF10511D4E9FE",
+    "overallElo": 2667,
+    "classicElo": 2613,
+    "wins": 3142,
+    "losses": 2640,
+    "gamesPlayed": 5819
+  },
+  {
+    "_id": "132A7D7182ABCC3",
+    "overallElo": 2662,
+    "classicElo": 2721,
+    "wins": 4039,
+    "losses": 3388,
+    "gamesPlayed": 7432
+  },
+  {
+    "_id": "C4E9D494F868DC6B",
+    "overallElo": 2659,
+    "classicElo": 2310,
+    "wins": 1874,
+    "losses": 1618,
+    "gamesPlayed": 3497
+  },
+  {
+    "_id": "BE02A5F9EB565BDC",
+    "overallElo": 2658,
+    "classicElo": 2388,
+    "wins": 2683,
+    "losses": 2376,
+    "gamesPlayed": 5062
+  },
+  {
+    "_id": "3B5B5EB692319D4D",
+    "overallElo": 2656,
+    "classicElo": 11347,
+    "wins": 2886,
+    "losses": 2475,
+    "gamesPlayed": 5379
+  },
+  {
+    "_id": "CD0C5089F7A23549",
+    "overallElo": 2655,
+    "classicElo": 2726,
+    "wins": 5570,
+    "losses": 5003,
+    "gamesPlayed": 10621
+  },
+  {
+    "_id": "95544A1FA324BF33",
+    "overallElo": 2653,
+    "classicElo": 0,
+    "wins": 120,
+    "losses": 19,
+    "gamesPlayed": 139
+  },
+  {
+    "_id": "433DE978152EF84F",
+    "overallElo": 2653,
+    "classicElo": 2756,
+    "wins": 785,
+    "losses": 367,
+    "gamesPlayed": 1153
+  },
+  {
+    "_id": "9944A205A2AB7240",
+    "overallElo": 2652,
+    "classicElo": 2549,
+    "wins": 2042,
+    "losses": 1774,
+    "gamesPlayed": 3818
+  },
+  {
+    "_id": "581264F13D7B1127",
+    "overallElo": 2652,
+    "classicElo": 2681,
+    "wins": 8283,
+    "losses": 6981,
+    "gamesPlayed": 15445
+  },
+  {
+    "_id": "D161342B4BB1BC17",
+    "overallElo": 2648,
+    "classicElo": 1805,
+    "wins": 2477,
+    "losses": 2297,
+    "gamesPlayed": 4777
+  },
+  {
+    "_id": "3333CB658C8D801B",
+    "overallElo": 2643,
+    "classicElo": 10339,
+    "wins": 2375,
+    "losses": 1969,
+    "gamesPlayed": 4344
+  },
+  {
+    "_id": "3778C3FA00A07FA6",
+    "overallElo": 2640,
+    "classicElo": -8,
+    "wins": 1787,
+    "losses": 1547,
+    "gamesPlayed": 3339
+  },
+  {
+    "_id": "20CBD647ED1F5BE6",
+    "overallElo": 2638,
+    "classicElo": 9339,
+    "wins": 10776,
+    "losses": 7221,
+    "gamesPlayed": 18483
+  },
+  {
+    "_id": "C9CE7A76F4A9B069",
+    "overallElo": 2635,
+    "classicElo": 6734,
+    "wins": 6567,
+    "losses": 4040,
+    "gamesPlayed": 14494
+  },
+  {
+    "_id": "F3B156CEC800EEF6",
+    "overallElo": 2632,
+    "classicElo": 3479,
+    "wins": 3804,
+    "losses": 3421,
+    "gamesPlayed": 7228
+  },
+  {
+    "_id": "35D595877CA8E2B9",
+    "overallElo": 2631,
+    "classicElo": -1625,
+    "wins": 645,
+    "losses": 453,
+    "gamesPlayed": 1098
+  },
+  {
+    "_id": "935DF21DEFE20CB7",
+    "overallElo": 2631,
+    "classicElo": -2122,
+    "wins": 2020,
+    "losses": 1858,
+    "gamesPlayed": 3879
+  },
+  {
+    "_id": "E40BFC808E6F0B50",
+    "overallElo": 2630,
+    "classicElo": 7998,
+    "wins": 1536,
+    "losses": 1256,
+    "gamesPlayed": 2792
+  },
+  {
+    "_id": "93D1A41E9800702D",
+    "overallElo": 2629,
+    "classicElo": -27,
+    "wins": 214,
+    "losses": 140,
+    "gamesPlayed": 354
+  },
+  {
+    "_id": "6CA47F23B52C955",
+    "overallElo": 2629,
+    "classicElo": 1608,
+    "wins": 4586,
+    "losses": 4161,
+    "gamesPlayed": 8841
+  },
+  {
+    "_id": "C9F668181B652D78",
+    "overallElo": 2623,
+    "classicElo": 1384,
+    "wins": 539,
+    "losses": 353,
+    "gamesPlayed": 893
+  },
+  {
+    "_id": "6849F9D14290C34A",
+    "overallElo": 2622,
+    "classicElo": 2774,
+    "wins": 9408,
+    "losses": 4976,
+    "gamesPlayed": 14581
+  },
+  {
+    "_id": "12EA798A321BFED",
+    "overallElo": 2621,
+    "classicElo": 1839,
+    "wins": 433,
+    "losses": 213,
+    "gamesPlayed": 648
+  },
+  {
+    "_id": "D776415E173DAB",
+    "overallElo": 2620,
+    "classicElo": 2464,
+    "wins": 5231,
+    "losses": 4486,
+    "gamesPlayed": 9760
+  },
+  {
+    "_id": "5859032C0513BC16",
+    "overallElo": 2616,
+    "classicElo": 7922,
+    "wins": 4590,
+    "losses": 3566,
+    "gamesPlayed": 8246
+  },
+  {
+    "_id": "C6A13DD241286D87",
+    "overallElo": 2615,
+    "classicElo": -400,
+    "wins": 1217,
+    "losses": 1040,
+    "gamesPlayed": 2258
+  },
+  {
+    "_id": "9A0446350E4819C1",
+    "overallElo": 2613,
+    "classicElo": -366,
+    "wins": 833,
+    "losses": 555,
+    "gamesPlayed": 1390
+  },
+  {
+    "_id": "452266A7EEEB7D1",
+    "overallElo": 2612,
+    "classicElo": 6370,
+    "wins": 2567,
+    "losses": 2168,
+    "gamesPlayed": 4737
+  },
+  {
+    "_id": "37BB0DD9114AE78E",
+    "overallElo": 2611,
+    "classicElo": 2213,
+    "wins": 1953,
+    "losses": 1581,
+    "gamesPlayed": 3535
+  },
+  {
+    "_id": "6EC40C39A498F2B3",
+    "overallElo": 2609,
+    "classicElo": 4405,
+    "wins": 1733,
+    "losses": 1651,
+    "gamesPlayed": 3387
+  },
+  {
+    "_id": "191CE72362151FFB",
+    "overallElo": 2608,
+    "classicElo": 2316,
+    "wins": 6550,
+    "losses": 5825,
+    "gamesPlayed": 12505
+  },
+  {
+    "_id": "A41F16F5B61DFE4E",
+    "overallElo": 2606,
+    "classicElo": 186,
+    "wins": 1554,
+    "losses": 1398,
+    "gamesPlayed": 2953
+  },
+  {
+    "_id": "98E52BF187CCD2AC",
+    "overallElo": 2601,
+    "classicElo": 108,
+    "wins": 3192,
+    "losses": 2897,
+    "gamesPlayed": 6089
+  },
+  {
+    "_id": "ED64AF0654C64A31",
+    "overallElo": 2599,
+    "classicElo": 845,
+    "wins": 781,
+    "losses": 714,
+    "gamesPlayed": 1495
+  },
+  {
+    "_id": "44AC0AE0B35B914D",
+    "overallElo": 2599,
+    "classicElo": 3945,
+    "wins": 814,
+    "losses": 404,
+    "gamesPlayed": 1219
+  },
+  {
+    "_id": "25D4C025C68883BB",
+    "overallElo": 2599,
+    "classicElo": -607,
+    "wins": 458,
+    "losses": 279,
+    "gamesPlayed": 737
+  },
+  {
+    "_id": "5E660F2FEE898E90",
+    "overallElo": 2599,
+    "classicElo": 2055,
+    "wins": 4283,
+    "losses": 3885,
+    "gamesPlayed": 8169
+  },
+  {
+    "_id": "FAB6C76B7F47C881",
+    "overallElo": 2599,
+    "classicElo": 6210,
+    "wins": 4632,
+    "losses": 4161,
+    "gamesPlayed": 8801
+  },
+  {
+    "_id": "B973E50AB9BCAB9C",
+    "overallElo": 2599,
+    "classicElo": 1830,
+    "wins": 979,
+    "losses": 733,
+    "gamesPlayed": 1712
+  },
+  {
+    "_id": "3B3AE2A859E43BB6",
+    "overallElo": 2599,
+    "classicElo": 217,
+    "wins": 2601,
+    "losses": 2265,
+    "gamesPlayed": 4872
+  },
+  {
+    "_id": "10A2DA02F2A9989C",
+    "overallElo": 2599,
+    "classicElo": 3667,
+    "wins": 3500,
+    "losses": 2773,
+    "gamesPlayed": 6277
+  },
+  {
+    "_id": "E0588E45A426B847",
+    "overallElo": 2599,
+    "classicElo": -1584,
+    "wins": 2148,
+    "losses": 1872,
+    "gamesPlayed": 4022
+  },
+  {
+    "_id": "D77FAC18B8309516",
+    "overallElo": 2599,
+    "classicElo": 1010,
+    "wins": 1272,
+    "losses": 1009,
+    "gamesPlayed": 2282
+  },
+  {
+    "_id": "57FA82D14F1DC56C",
+    "overallElo": 2599,
+    "classicElo": 2028,
+    "wins": 2694,
+    "losses": 2388,
+    "gamesPlayed": 5083
+  },
+  {
+    "_id": "8639CDCF4DB826D5",
+    "overallElo": 2599,
+    "classicElo": 3123,
+    "wins": 3732,
+    "losses": 3377,
+    "gamesPlayed": 7126
+  },
+  {
+    "_id": "8AC0FFFAD91ED6B6",
+    "overallElo": 2599,
+    "classicElo": 5190,
+    "wins": 2055,
+    "losses": 1429,
+    "gamesPlayed": 3486
+  },
+  {
+    "_id": "A8DB2547161A85AD",
+    "overallElo": 2598,
+    "classicElo": -1360,
+    "wins": 4266,
+    "losses": 3673,
+    "gamesPlayed": 7941
+  },
+  {
+    "_id": "2029AC8F880CC3D4",
+    "overallElo": 2596,
+    "classicElo": -1762,
+    "wins": 1812,
+    "losses": 1640,
+    "gamesPlayed": 3458
+  },
+  {
+    "_id": "3C53D6A2F49AB313",
+    "overallElo": 2596,
+    "classicElo": -40,
+    "wins": 2559,
+    "losses": 2247,
+    "gamesPlayed": 4807
+  },
+  {
+    "_id": "5061CBE95E9914F",
+    "overallElo": 2595,
+    "classicElo": -1108,
+    "wins": 2629,
+    "losses": 2467,
+    "gamesPlayed": 5108
+  },
+  {
+    "_id": "E76274C7E94774C1",
+    "overallElo": 2594,
+    "classicElo": 2172,
+    "wins": 1588,
+    "losses": 1364,
+    "gamesPlayed": 2954
+  },
+  {
+    "_id": "876587A0625FE94C",
+    "overallElo": 2593,
+    "classicElo": 4159,
+    "wins": 1774,
+    "losses": 1550,
+    "gamesPlayed": 3334
+  },
+  {
+    "_id": "B1FF5E44FB2AA0BC",
+    "overallElo": 2589,
+    "classicElo": 2494,
+    "wins": 513,
+    "losses": 354,
+    "gamesPlayed": 867
+  },
+  {
+    "_id": "D1744423F9473CF6",
+    "overallElo": 2587,
+    "classicElo": 2964,
+    "wins": 2299,
+    "losses": 1821,
+    "gamesPlayed": 4121
+  },
+  {
+    "_id": "15AF7E1BD38F3A24",
+    "overallElo": 2583,
+    "classicElo": 2092,
+    "wins": 2117,
+    "losses": 1796,
+    "gamesPlayed": 3923
+  },
+  {
+    "_id": "B7799B185A72601B",
+    "overallElo": 2582,
+    "classicElo": 0,
+    "wins": 231,
+    "losses": 127,
+    "gamesPlayed": 358
+  },
+  {
+    "_id": "DE46CC067FAF8649",
+    "overallElo": 2580,
+    "classicElo": 3006,
+    "wins": 5054,
+    "losses": 4743,
+    "gamesPlayed": 9817
+  },
+  {
+    "_id": "82BCE6EC3172A1E2",
+    "overallElo": 2579,
+    "classicElo": 913,
+    "wins": 894,
+    "losses": 781,
+    "gamesPlayed": 1675
+  },
+  {
+    "_id": "FBB9B58B8370B2F8",
+    "overallElo": 2577,
+    "classicElo": 1859,
+    "wins": 5158,
+    "losses": 4782,
+    "gamesPlayed": 9953
+  },
+  {
+    "_id": "CFFFFCBD575B12B",
+    "overallElo": 2574,
+    "classicElo": 430,
+    "wins": 337,
+    "losses": 211,
+    "gamesPlayed": 548
+  },
+  {
+    "_id": "4266EF78F3F2E247",
+    "overallElo": 2574,
+    "classicElo": 680,
+    "wins": 1986,
+    "losses": 1718,
+    "gamesPlayed": 3709
+  },
+  {
+    "_id": "895F6CBA6E2C3DFA",
+    "overallElo": 2568,
+    "classicElo": 2746,
+    "wins": 2214,
+    "losses": 1851,
+    "gamesPlayed": 4096
+  },
+  {
+    "_id": "C5B99897B69548FF",
+    "overallElo": 2568,
+    "classicElo": 4840,
+    "wins": 10292,
+    "losses": 5810,
+    "gamesPlayed": 16531
+  },
+  {
+    "_id": "EF746F1E05E0F9C8",
+    "overallElo": 2567,
+    "classicElo": 4271,
+    "wins": 2668,
+    "losses": 2244,
+    "gamesPlayed": 4933
+  },
+  {
+    "_id": "80CD6F9575E65F43",
+    "overallElo": 2565,
+    "classicElo": 2447,
+    "wins": 9578,
+    "losses": 9048,
+    "gamesPlayed": 18637
+  },
+  {
+    "_id": "3F395FA1A4FFE027",
+    "overallElo": 2564,
+    "classicElo": 6003,
+    "wins": 4918,
+    "losses": 4680,
+    "gamesPlayed": 9614
+  },
+  {
+    "_id": "8E0FDADBBAE0E89C",
+    "overallElo": 2561,
+    "classicElo": 0,
+    "wins": 423,
+    "losses": 291,
+    "gamesPlayed": 714
+  },
+  {
+    "_id": "C952B4139C63E7E",
+    "overallElo": 2559,
+    "classicElo": 168,
+    "wins": 1849,
+    "losses": 1743,
+    "gamesPlayed": 3593
+  },
+  {
+    "_id": "1A817ECFE976A8FF",
+    "overallElo": 2559,
+    "classicElo": 1983,
+    "wins": 323,
+    "losses": 171,
+    "gamesPlayed": 495
+  },
+  {
+    "_id": "7CDAB2FFBED2633",
+    "overallElo": 2558,
+    "classicElo": -2082,
+    "wins": 1320,
+    "losses": 1023,
+    "gamesPlayed": 2358
+  },
+  {
+    "_id": "34C4366CACEBA5E3",
+    "overallElo": 2556,
+    "classicElo": 1636,
+    "wins": 1062,
+    "losses": 940,
+    "gamesPlayed": 2011
+  },
+  {
+    "_id": "D5B79A3B8D4A251C",
+    "overallElo": 2555,
+    "classicElo": 9377,
+    "wins": 3957,
+    "losses": 3620,
+    "gamesPlayed": 7580
+  },
+  {
+    "_id": "D70D83385B5D47FC",
+    "overallElo": 2554,
+    "classicElo": 2881,
+    "wins": 692,
+    "losses": 521,
+    "gamesPlayed": 1213
+  },
+  {
+    "_id": "BDC5C60D44AA826",
+    "overallElo": 2553,
+    "classicElo": -1720,
+    "wins": 604,
+    "losses": 454,
+    "gamesPlayed": 1058
+  },
+  {
+    "_id": "7810331D2D50528F",
+    "overallElo": 2553,
+    "classicElo": 2395,
+    "wins": 3011,
+    "losses": 2753,
+    "gamesPlayed": 5781
+  },
+  {
+    "_id": "55EBD215AB16C315",
+    "overallElo": 2552,
+    "classicElo": 7757,
+    "wins": 3340,
+    "losses": 3024,
+    "gamesPlayed": 6380
+  },
+  {
+    "_id": "DF8EFA36429032A2",
+    "overallElo": 2550,
+    "classicElo": 0,
+    "wins": 317,
+    "losses": 176,
+    "gamesPlayed": 495
+  },
+  {
+    "_id": "2DA8853D99645469",
+    "overallElo": 2550,
+    "classicElo": 3173,
+    "wins": 694,
+    "losses": 537,
+    "gamesPlayed": 1231
+  },
+  {
+    "_id": "FDF7C72A808BEA52",
+    "overallElo": 2549,
+    "classicElo": 10196,
+    "wins": 3647,
+    "losses": 3095,
+    "gamesPlayed": 6791
+  },
+  {
+    "_id": "54FF8480FD6115BD",
+    "overallElo": 2546,
+    "classicElo": 7415,
+    "wins": 5986,
+    "losses": 5344,
+    "gamesPlayed": 11484
+  },
+  {
+    "_id": "29D1B6E57A425D50",
+    "overallElo": 2545,
+    "classicElo": 2588,
+    "wins": 3953,
+    "losses": 3457,
+    "gamesPlayed": 7419
+  },
+  {
+    "_id": "C929D54B07EB6390",
+    "overallElo": 2545,
+    "classicElo": 2236,
+    "wins": 6920,
+    "losses": 6540,
+    "gamesPlayed": 13622
+  },
+  {
+    "_id": "4B3BF6325834E4BA",
+    "overallElo": 2544,
+    "classicElo": 8345,
+    "wins": 3053,
+    "losses": 1434,
+    "gamesPlayed": 4530
+  },
+  {
+    "_id": "DDAF21511A213FB6",
+    "overallElo": 2541,
+    "classicElo": 2729,
+    "wins": 4393,
+    "losses": 4104,
+    "gamesPlayed": 8498
+  },
+  {
+    "_id": "C7F743F3147DC126",
+    "overallElo": 2541,
+    "classicElo": 3715,
+    "wins": 3362,
+    "losses": 3051,
+    "gamesPlayed": 6416
+  },
+  {
+    "_id": "4F4ECDB7F64526B3",
+    "overallElo": 2540,
+    "classicElo": 3357,
+    "wins": 1481,
+    "losses": 1114,
+    "gamesPlayed": 2609
+  },
+  {
+    "_id": "478610DDA17E8E64",
+    "overallElo": 2539,
+    "classicElo": -470,
+    "wins": 1979,
+    "losses": 1702,
+    "gamesPlayed": 3686
+  },
+  {
+    "_id": "9331B77C2EFDBAE2",
+    "overallElo": 2538,
+    "classicElo": 1420,
+    "wins": 1974,
+    "losses": 1718,
+    "gamesPlayed": 3692
+  },
+  {
+    "_id": "DD76C5FEDB045B6",
+    "overallElo": 2537,
+    "classicElo": 2705,
+    "wins": 2612,
+    "losses": 2297,
+    "gamesPlayed": 4917
+  },
+  {
+    "_id": "C7ED5DBE6C5610F0",
+    "overallElo": 2535,
+    "classicElo": -772,
+    "wins": 406,
+    "losses": 249,
+    "gamesPlayed": 656
+  },
+  {
+    "_id": "19E14E16FF551BE1",
+    "overallElo": 2534,
+    "classicElo": 1714,
+    "wins": 497,
+    "losses": 343,
+    "gamesPlayed": 840
+  },
+  {
+    "_id": "60323B3B82CEB7AC",
+    "overallElo": 2534,
+    "classicElo": 2120,
+    "wins": 3220,
+    "losses": 2913,
+    "gamesPlayed": 6134
+  },
+  {
+    "_id": "552604364FE8B637",
+    "overallElo": 2533,
+    "classicElo": 0,
+    "wins": 136,
+    "losses": 56,
+    "gamesPlayed": 192
+  },
+  {
+    "_id": "F00A337A64C3CAB8",
+    "overallElo": 2532,
+    "classicElo": 297,
+    "wins": 1692,
+    "losses": 1533,
+    "gamesPlayed": 3265
+  },
+  {
+    "_id": "289934BE27F4648F",
+    "overallElo": 2531,
+    "classicElo": 549,
+    "wins": 1054,
+    "losses": 907,
+    "gamesPlayed": 1962
+  },
+  {
+    "_id": "DF80B8F5D7CAE88F",
+    "overallElo": 2531,
+    "classicElo": 2267,
+    "wins": 2205,
+    "losses": 1804,
+    "gamesPlayed": 4116
+  },
+  {
+    "_id": "72F018341B9D390",
+    "overallElo": 2530,
+    "classicElo": 6112,
+    "wins": 4424,
+    "losses": 3016,
+    "gamesPlayed": 7443
+  },
+  {
+    "_id": "106AD8DAB091D1D",
+    "overallElo": 2530,
+    "classicElo": 11214,
+    "wins": 4331,
+    "losses": 3261,
+    "gamesPlayed": 7600
+  },
+  {
+    "_id": "E3A94C9CBA803C21",
+    "overallElo": 2529,
+    "classicElo": 2317,
+    "wins": 3345,
+    "losses": 3120,
+    "gamesPlayed": 6465
+  },
+  {
+    "_id": "4632E1668CEFBB98",
+    "overallElo": 2528,
+    "classicElo": 1894,
+    "wins": 4611,
+    "losses": 4367,
+    "gamesPlayed": 8989
+  },
+  {
+    "_id": "6DDDB62AB4F7B037",
+    "overallElo": 2528,
+    "classicElo": 6694,
+    "wins": 3579,
+    "losses": 3309,
+    "gamesPlayed": 6897
+  },
+  {
+    "_id": "D1EF5AF4425B8253",
+    "overallElo": 2527,
+    "classicElo": 2483,
+    "wins": 621,
+    "losses": 347,
+    "gamesPlayed": 971
+  },
+  {
+    "_id": "F2441B19F7A8DF88",
+    "overallElo": 2522,
+    "classicElo": 3212,
+    "wins": 6299,
+    "losses": 5964,
+    "gamesPlayed": 12290
+  },
+  {
+    "_id": "413ABB167DD312CF",
+    "overallElo": 2521,
+    "classicElo": 2388,
+    "wins": 9690,
+    "losses": 9239,
+    "gamesPlayed": 18960
+  },
+  {
+    "_id": "4BDE6E8A9E89A20A",
+    "overallElo": 2520,
+    "classicElo": 9108,
+    "wins": 3702,
+    "losses": 3138,
+    "gamesPlayed": 6844
+  },
+  {
+    "_id": "58A36B894F535692",
+    "overallElo": 2519,
+    "classicElo": -245,
+    "wins": 189,
+    "losses": 96,
+    "gamesPlayed": 285
+  },
+  {
+    "_id": "10C88428E9E991A3",
+    "overallElo": 2515,
+    "classicElo": 960,
+    "wins": 2727,
+    "losses": 2396,
+    "gamesPlayed": 5200
+  },
+  {
+    "_id": "F329B72B449606FA",
+    "overallElo": 2514,
+    "classicElo": 3112,
+    "wins": 1941,
+    "losses": 1501,
+    "gamesPlayed": 3459
+  },
+  {
+    "_id": "79C0D6316D0754EB",
+    "overallElo": 2513,
+    "classicElo": 4519,
+    "wins": 723,
+    "losses": 463,
+    "gamesPlayed": 1187
+  },
+  {
+    "_id": "3613ED0A7B927E2C",
+    "overallElo": 2513,
+    "classicElo": 2276,
+    "wins": 3552,
+    "losses": 3313,
+    "gamesPlayed": 6866
+  },
+  {
+    "_id": "3BC02E5DD04C97AC",
+    "overallElo": 2512,
+    "classicElo": 1709,
+    "wins": 679,
+    "losses": 460,
+    "gamesPlayed": 1153
+  },
+  {
+    "_id": "E02F315A2FD68F96",
+    "overallElo": 2512,
+    "classicElo": 1968,
+    "wins": 5306,
+    "losses": 4576,
+    "gamesPlayed": 9910
+  },
+  {
+    "_id": "5B90E0BD599ACBF5",
+    "overallElo": 2512,
+    "classicElo": 4969,
+    "wins": 6334,
+    "losses": 5495,
+    "gamesPlayed": 11982
+  },
+  {
+    "_id": "6167FFE511A3FE11",
+    "overallElo": 2511,
+    "classicElo": -274,
+    "wins": 968,
+    "losses": 664,
+    "gamesPlayed": 1633
+  },
+  {
+    "_id": "A5218B04BE5B5921",
+    "overallElo": 2510,
+    "classicElo": 3488,
+    "wins": 2297,
+    "losses": 1801,
+    "gamesPlayed": 4139
+  },
+  {
+    "_id": "B247F2BB5D6970BE",
+    "overallElo": 2510,
+    "classicElo": 3162,
+    "wins": 4580,
+    "losses": 4230,
+    "gamesPlayed": 8812
+  },
+  {
+    "_id": "2DC0FE3F3FD24273",
+    "overallElo": 2509,
+    "classicElo": 1166,
+    "wins": 3300,
+    "losses": 3053,
+    "gamesPlayed": 6363
+  },
+  {
+    "_id": "414AA0940AAF37EF",
+    "overallElo": 2508,
+    "classicElo": 8001,
+    "wins": 794,
+    "losses": 664,
+    "gamesPlayed": 1462
+  },
+  {
+    "_id": "967CEC083567F0F6",
+    "overallElo": 2508,
+    "classicElo": 9764,
+    "wins": 2041,
+    "losses": 1681,
+    "gamesPlayed": 3722
+  },
+  {
+    "_id": "E75AC83D1AAB85CC",
+    "overallElo": 2508,
+    "classicElo": 2578,
+    "wins": 863,
+    "losses": 710,
+    "gamesPlayed": 1589
+  },
+  {
+    "_id": "801EC1A8F425C27E",
+    "overallElo": 2507,
+    "classicElo": -290,
+    "wins": 1675,
+    "losses": 1397,
+    "gamesPlayed": 3100
+  },
+  {
+    "_id": "BBDDBA63F7259D2E",
+    "overallElo": 2506,
+    "classicElo": -587,
+    "wins": 2468,
+    "losses": 2262,
+    "gamesPlayed": 4732
+  },
+  {
+    "_id": "EF3F99D71A7037FE",
+    "overallElo": 2504,
+    "classicElo": 8054,
+    "wins": 890,
+    "losses": 666,
+    "gamesPlayed": 1556
+  },
+  {
+    "_id": "7AAD0C4045D3A8E8",
+    "overallElo": 2503,
+    "classicElo": 2165,
+    "wins": 3124,
+    "losses": 2808,
+    "gamesPlayed": 5940
+  },
+  {
+    "_id": "29B156375C49C5EB",
+    "overallElo": 2502,
+    "classicElo": 10271,
+    "wins": 2914,
+    "losses": 2648,
+    "gamesPlayed": 5565
+  },
+  {
+    "_id": "1D17482F32F591DF",
+    "overallElo": 2501,
+    "classicElo": 2762,
+    "wins": 1717,
+    "losses": 1478,
+    "gamesPlayed": 3198
+  },
+  {
+    "_id": "87F24A17A95115FC",
+    "overallElo": 2500,
+    "classicElo": -583,
+    "wins": 3091,
+    "losses": 2789,
+    "gamesPlayed": 5884
+  }
+]

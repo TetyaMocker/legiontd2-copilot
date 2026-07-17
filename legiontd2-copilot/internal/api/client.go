@@ -78,14 +78,11 @@ func (c *Client) GetPlayerByName(ctx context.Context, name string) (*Player, err
 }
 
 func (c *Client) GetPlayerByID(ctx context.Context, id string) (*Player, error) {
-	var players []Player
-	if err := c.doRequest(ctx, "/players/byId/"+id, &players); err != nil {
+	var p Player
+	if err := c.doRequest(ctx, "/players/byId/"+id, &p); err != nil {
 		return nil, err
 	}
-	if len(players) == 0 {
-		return nil, fmt.Errorf("player %q not found", id)
-	}
-	return &players[0], nil
+	return &p, nil
 }
 
 func (c *Client) GetPlayerStats(ctx context.Context, id string) (*Stats, error) {
@@ -108,11 +105,8 @@ func (c *Client) GetTopPlayers(ctx context.Context, sortBy string, limit, offset
 	return stats, nil
 }
 
-func (c *Client) GetMatchHistory(ctx context.Context, playerID string, limit, offset int, includeDetails bool) ([]Match, error) {
+func (c *Client) GetMatchHistory(ctx context.Context, playerID string, limit, offset int) ([]Match, error) {
 	path := fmt.Sprintf("/players/matchHistory/%s?limit=%d&offset=%d", playerID, limit, offset)
-	if includeDetails {
-		path += "&includeDetails=true"
-	}
 	var matches []Match
 	if err := c.doRequest(ctx, path, &matches); err != nil {
 		return nil, err
@@ -132,13 +126,10 @@ func (c *Client) GetMatchByID(ctx context.Context, id string, includeDetails boo
 	return &m, nil
 }
 
-func (c *Client) GetMatchesByFilter(ctx context.Context, version string, limit, offset int, includeDetails bool) ([]Match, error) {
-	path := fmt.Sprintf("/games?limit=%d&offset=%d", limit, offset)
+func (c *Client) GetGames(ctx context.Context, version string, limit, offset int) ([]Match, error) {
+	path := fmt.Sprintf("/games?limit=%d&offset=%d&includeDetails=true", limit, offset)
 	if version != "" {
 		path += "&version=" + version
-	}
-	if includeDetails {
-		path += "&includeDetails=true"
 	}
 	var matches []Match
 	if err := c.doRequest(ctx, path, &matches); err != nil {

@@ -15,6 +15,7 @@ const (
 	AttackNormal  EnemyAttack = "normal"
 	AttackPierce  EnemyAttack = "pierce"
 	AttackMagic   EnemyAttack = "magic"
+	AttackChaos   EnemyAttack = "chaos"
 )
 
 type Wave struct {
@@ -56,8 +57,6 @@ var WavesByNumber = map[int]Wave{
 	20: {20, "Maccabeus", "Maccabeus", ArmorFortified, AttackMagic, 1, 0, "", "", "", 43, 7350, 300},
 	21: {21, "Legion Lord", "Legion Lord", ArmorLight, AttackChaos, 8, 1, "Legion King", ArmorLight, AttackChaos, 44, 9000, 360},
 }
-
-const AttackChaos = EnemyAttack("chaos")
 
 func GetWave(num int) (Wave, bool) {
 	w, ok := WavesByNumber[num]

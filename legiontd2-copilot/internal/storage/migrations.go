@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS wave_snapshots (
     king_hp_percent     INTEGER,
     ally_king_hp_percent INTEGER,
     confidence          REAL,
-    source              TEXT NOT NULL DEFAULT 'ocr'
+    source              TEXT NOT NULL DEFAULT 'hudapi'
 );
 
 CREATE TABLE IF NOT EXISTS recommendations (

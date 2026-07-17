@@ -2,14 +2,88 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log/slog"
 	"os"
-	"time"
+	"path/filepath"
+	"strings"
 
 	"github.com/yourname/legiontd2-copilot/internal/api"
 	"github.com/yourname/legiontd2-copilot/internal/dataset"
 )
+
+type CompactMatch struct {
+	PlayerName string   `json:"playerName"`
+	PlayerElo  int      `json:"playerElo"`
+	Version    string   `json:"version"`
+	QueueType  string   `json:"queueType"`
+	EndingWave int      `json:"endingWave"`
+	GameLength int      `json:"gameLength"`
+	GameResult string   `json:"gameResult"`
+	Legion     string   `json:"legion"`
+	EloChange  int      `json:"eloChange"`
+	Fighters   []string `json:"fighters"`
+	Mercs      []string `json:"mercs"`
+	Workers    []float64 `json:"workers"`
+	Income     []float64 `json:"income"`
+	NetWorth   []float64 `json:"netWorth"`
+	Value      []float64 `json:"value"`
+	ChosenSpell string  `json:"chosenSpell"`
+	MvpScore   int      `json:"mvpScore"`
+	LeakValue  int      `json:"leakValue"`
+	Doubledown bool     `json:"doubledown"`
+}
+
+func parseFloatsField(raw json.RawMessage) []float64 {
+	if len(raw) == 0 {
+		return nil
+	}
+	// try array of numbers first
+	var arr []float64
+	if err := json.Unmarshal(raw, &arr); err == nil {
+		return arr
+	}
+	// try space-separated string
+	var s string
+	if err := json.Unmarshal(raw, &s); err == nil {
+		if s == "" || s == "   " {
+			return nil
+		}
+		parts := strings.Fields(s)
+		out := make([]float64, 0, len(parts))
+		for _, p := range parts {
+			var v float64
+			if _, err := fmt.Sscanf(p, "%f", &v); err == nil {
+				out = append(out, v)
+			}
+		}
+		return out
+	}
+	return nil
+}
+
+func splitCSV(s string) []string {
+	if s == "" {
+		return nil
+	}
+	var result []string
+	current := ""
+	for _, c := range s {
+		if c == ',' {
+			if current != "" {
+				result = append(result, current)
+			}
+			current = ""
+		} else {
+			current += string(c)
+		}
+	}
+	if current != "" {
+		result = append(result, current)
+	}
+	return result
+}
 
 func main() {
 	slog.SetDefault(slog.New(slog.NewJSONHandler(os.Stdout, nil)))
@@ -34,112 +108,63 @@ func main() {
 	collector := dataset.NewCollector(client, outDir)
 	ctx := context.Background()
 
-	// 1. Collect top 200 players by Elo
-	slog.Info("step 1: collecting top players")
-	topPlayers, err := collector.CollectTopPlayers(ctx, "overallElo", 200)
-	if err != nil {
-		slog.Error("collect top players", "error", err)
-	}
-	collector.SaveJSON("top_players", topPlayers)
+	gamesPath := filepath.Join(outDir, "games.json")
+	var games []api.Match
 
-	// 2. For each top player, collect match history
-	type PlayerMatches struct {
-		Player  api.Stats    `json:"player"`
-		Matches []api.Match  `json:"matches"`
+	if _, err := os.Stat(gamesPath); err == nil {
+		slog.Info("step 1: loading cached games")
+		data, _ := os.ReadFile(gamesPath)
+		json.Unmarshal(data, &games)
 	}
 
-	var allData []PlayerMatches
-	playerLimit := 20
-	if len(topPlayers) < playerLimit {
-		playerLimit = len(topPlayers)
-	}
-
-	slog.Info("step 2: collecting match histories", "players", playerLimit)
-	for i, p := range topPlayers[:playerLimit] {
-		slog.Info("fetching matches", "player", p.PlayerName, "i", i+1, "total", playerLimit)
-
-		matches, err := collector.CollectPlayerMatches(ctx, p.PlayerID, 20)
+	if len(games) == 0 {
+		slog.Info("step 1: collecting games with details")
+		var err error
+		games, err = collector.CollectGames(ctx, "v26.6", 3000)
 		if err != nil {
-			slog.Warn("skip player", "player", p.PlayerName, "error", err)
-			continue
+			slog.Error("collect games", "error", err)
 		}
-
-		allData = append(allData, PlayerMatches{
-			Player:  p,
-			Matches: matches,
-		})
-
-		time.Sleep(200 * time.Millisecond)
+		collector.SaveJSON("games", games)
+	} else {
+		slog.Info("using cached games", "count", len(games))
 	}
 
-	// 3. Save complete dataset
-	collector.SaveJSON("dataset", allData)
-
-	// 4. Save a compact version with just match details
-	type CompactMatch struct {
-		PlayerName string              `json:"playerName"`
-		PlayerElo  int                 `json:"playerElo"`
-		Version    string              `json:"version"`
-		QueueType  string              `json:"queueType"`
-		EndingWave int                 `json:"endingWave"`
-		GameLength int                 `json:"gameLength"`
-		GameResult string              `json:"gameResult"`
-		Legion     string              `json:"legion"`
-		Fighters   []string            `json:"fighters"`
-		Mercs      []string            `json:"mercs"`
-		WorkersPerWave  []int          `json:"workersPerWave"`
-		IncomePerWave   []int          `json:"incomePerWave"`
-		NetWorthPerWave []int          `json:"netWorthPerWave"`
-		BuildPerWave    []string       `json:"buildPerWave"`
-		LeaksPerWave    []string       `json:"leaksPerWave"`
-		MercsSentPerWave []any         `json:"mercsSentPerWave"`
-		KingUpgrades    []string       `json:"kingUpgrades"`
-	}
-
+	slog.Info("step 2: flattening player data")
 	var compact []CompactMatch
-	for _, pd := range allData {
-		for _, m := range pd.Matches {
-			for _, pl := range m.PlayersData {
-				cm := CompactMatch{
-					PlayerName: pl.PlayerName,
-					PlayerElo:  pl.OverallElo,
-					Version:    m.Version,
-					QueueType:  m.QueueType,
-					EndingWave: m.EndingWave,
-					GameLength: m.GameLength,
-					GameResult: pl.GameResult,
-					Legion:     pl.Legion,
-					WorkersPerWave:  pl.WorkersPerWave,
-					IncomePerWave:   pl.IncomePerWave,
-					NetWorthPerWave: pl.NetWorthPerWave,
-					BuildPerWave:    pl.BuildPerWave,
-					LeaksPerWave:    pl.LeaksPerWave,
-					MercsSentPerWave: pl.MercenariesSentPerWave,
-					KingUpgrades:    pl.KingUpgradesPerWave,
-				}
-				// Parse fighter/merc CSV
-				if pl.Fighters != "" {
-					cm.Fighters = splitCSV(pl.Fighters)
-				}
-				if pl.Mercenaries != "" {
-					cm.Mercs = splitCSV(pl.Mercenaries)
-				}
-				compact = append(compact, cm)
+	for _, g := range games {
+		var players []api.PlayerMatchDetails
+		if len(g.PlayersData) > 0 {
+			if err := json.Unmarshal(g.PlayersData, &players); err != nil {
+				continue
 			}
+		}
+		for _, pl := range players {
+			cm := CompactMatch{
+				PlayerName:  pl.PlayerName,
+				PlayerElo:   pl.OverallElo,
+				Version:     g.Version,
+				QueueType:   g.QueueType,
+				EndingWave:  g.EndingWave,
+				GameLength:  g.GameLength,
+				GameResult:  pl.GameResult,
+				Legion:      pl.Legion,
+				EloChange:   pl.EloChange,
+				ChosenSpell: pl.ChosenSpell,
+				MvpScore:    pl.MvpScore,
+				LeakValue:   pl.LeakValue,
+				Doubledown:  pl.Doubledown,
+				Fighters:    splitCSV(pl.Fighters),
+				Mercs:       splitCSV(pl.Mercenaries),
+				Workers:     parseFloatsField(pl.WorkersPerWave),
+				Income:      parseFloatsField(pl.IncomePerWave),
+				NetWorth:    parseFloatsField(pl.NetWorthPerWave),
+				Value:       parseFloatsField(pl.ValuePerWave),
+			}
+			compact = append(compact, cm)
 		}
 	}
 
 	collector.SaveJSON("dataset_compact", compact)
-
-	// 5. Summary
-	f, _ := os.Create(outDir + "/summary.txt")
-	defer f.Close()
-	fmt.Fprintf(f, "Dataset Summary\n")
-	fmt.Fprintf(f, "==============\n\n")
-	fmt.Fprintf(f, "Top players collected: %d\n", len(topPlayers))
-	fmt.Fprintf(f, "Players with matches: %d\n", len(allData))
-	fmt.Fprintf(f, "Total matches: %d\n", len(compact))
-	fmt.Fprintf(f, "Total player match entries: %d\n", len(compact))
 
 	var wins, losses int
 	for _, m := range compact {
@@ -149,36 +174,18 @@ func main() {
 			losses++
 		}
 	}
+
+	f, _ := os.Create(outDir + "/summary.txt")
+	defer f.Close()
+	fmt.Fprintf(f, "Dataset Summary\n")
+	fmt.Fprintf(f, "==============\n\n")
+	fmt.Fprintf(f, "Games collected: %d\n", len(games))
+	fmt.Fprintf(f, "Player entries: %d\n", len(compact))
 	fmt.Fprintf(f, "Wins: %d, Losses: %d\n", wins, losses)
+	fmt.Fprintf(f, "Win rate: %.1f%%\n", float64(wins)/float64(wins+losses)*100)
 
-	slog.Info("done", "output", outDir)
+	slog.Info("done", "output", outDir, "games", len(games), "entries", len(compact))
 	fmt.Printf("Dataset saved to %s/\n", outDir)
-	fmt.Printf("  top_players.json — %d players\n", len(topPlayers))
-	fmt.Printf("  dataset.json — full data\n")
-	fmt.Printf("  dataset_compact.json — %d match entries\n", len(compact))
+	fmt.Printf("  games.json — %d games\n", len(games))
+	fmt.Printf("  dataset_compact.json — %d player entries\n", len(compact))
 }
-
-func splitCSV(s string) []string {
-	if s == "" {
-		return nil
-	}
-	// The API uses comma-separated values, may have brackets for per-wave data
-	var result []string
-	current := ""
-	for _, c := range s {
-		if c == ',' {
-			if current != "" {
-				result = append(result, current)
-			}
-			current = ""
-		} else {
-			current += string(c)
-		}
-	}
-	if current != "" {
-		result = append(result, current)
-	}
-	return result
-}
-
-

@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/yourname/legiontd2-copilot/internal/advisor"
-	"github.com/yourname/legiontd2-copilot/internal/api"
 	"github.com/yourname/legiontd2-copilot/internal/http"
 	"github.com/yourname/legiontd2-copilot/internal/storage"
 	"github.com/yourname/legiontd2-copilot/internal/ws"
@@ -24,7 +23,6 @@ func main() {
 
 	dbPath := env("LT2_DB_PATH", "lt2_copilot.db")
 	webAddr := env("LT2_WEB_ADDR", ":8080")
-	apiKey := os.Getenv("LT2_API_KEY")
 
 	store, err := storage.New(dbPath)
 	if err != nil {
@@ -32,12 +30,6 @@ func main() {
 		os.Exit(1)
 	}
 	defer store.Close()
-
-	if apiKey != "" {
-		apiClient := api.NewClient(apiKey)
-		_ = apiClient
-		slog.Info("api client configured")
-	}
 
 	hub := ws.NewHub()
 	httpserver.New(webAddr, hub)

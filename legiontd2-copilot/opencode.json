@@ -1,0 +1,22 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": [
+    "TZ_LegionTD2_Assistant.md",
+    "AGENTS.md"
+  ],
+  "agent": {
+    "plan": {
+      "permission": {
+        "edit": "deny",
+        "bash": "ask"
+      }
+    },
+    "build": {
+      "permission": {
+        "task": {
+          "*": "allow"
+        }
+      }
+    }
+  }
+}
