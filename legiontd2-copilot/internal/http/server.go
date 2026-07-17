@@ -26,6 +26,20 @@ func New(addr string, hub *ws.Hub) *http.Server {
 
 	mux.HandleFunc("/ws", hub.ServeWS)
 
+	mux.HandleFunc("/api/ingest", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			http.Error(w, "POST required", 400)
+			return
+		}
+		var state ws.GameState
+		if err := json.NewDecoder(r.Body).Decode(&state); err != nil {
+			http.Error(w, "bad json", 400)
+			return
+		}
+		hub.SetState(state)
+		w.WriteHeader(204)
+	})
+
 	sub, err := fs.Sub(staticFS, "static")
 	if err != nil {
 		slog.Error("static fs sub", "error", err)
