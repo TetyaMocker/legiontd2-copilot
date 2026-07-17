@@ -22,7 +22,7 @@ function buildUnitCard(u, gold, supply, supplyCap, mythium) {
 
   const btn = document.createElement('button');
   btn.className = 'action-btn';
-  btn.textContent = 'Stav';
+  btn.textContent = 'Ставь';
   btn.disabled = !canAfford;
 
   const info = document.createElement('span');
@@ -47,7 +47,7 @@ function updateUI(data) {
   document.getElementById('gold').textContent = state.gold ?? '—';
   document.getElementById('income').textContent = state.income ?? '—';
   document.getElementById('wave').textContent = state.wave ?? '—';
-  document.getElementById('phase').textContent = state.phase === 'fighting' ? 'FIGHT' : 'Bild';
+  document.getElementById('phase').textContent = state.phase === 'fighting' ? 'БОЙ' : 'Стройка';
 
   const timer = state.waveTimer;
   if (timer != null) {
@@ -67,7 +67,7 @@ function updateUI(data) {
       handEl.appendChild(buildUnitCard(u, state.gold, state.supply, state.supplyCap, state.mythium));
     });
   } else {
-    handEl.innerHTML = '<div class="dim" style="padding:8px">Net dannyh</div>';
+    handEl.innerHTML = '<div class="dim" style="padding:8px">Нет данных</div>';
   }
 
   const mercEl = document.getElementById('mercs');
@@ -77,7 +77,7 @@ function updateUI(data) {
       mercEl.appendChild(buildUnitCard(m, state.gold, state.supply, state.supplyCap, state.mythium));
     });
   } else {
-    mercEl.innerHTML = '<div class="dim" style="padding:8px">Net dannyh</div>';
+    mercEl.innerHTML = '<div class="dim" style="padding:8px">Нет данных</div>';
   }
 
   const recsEl = document.getElementById('recommendations');
@@ -94,7 +94,7 @@ function updateUI(data) {
       recsEl.appendChild(li);
     });
   } else {
-    recsEl.innerHTML = '<li class="dim">Net dannyh</li>';
+    recsEl.innerHTML = '<li class="dim">Нет данных</li>';
   }
 }
 

@@ -1,11 +1,3 @@
-// Package api — клиент официального Legion TD 2 API v2 (https://apiv2.legiontd2.com).
-//
-// Используется ТОЛЬКО для офлайн-контура: справочники юнитов/волн/спеллов,
-// история собственных матчей для обучения Advisor'а (см. ТЗ, раздел 8.4).
-// Никогда не вызывается в горячем пути во время матча — не даёт live-данных.
-//
-// Ключ выпускается на developer.legiontd2.com, передаётся в заголовке x-api-key.
-// Rate limit по состоянию на Phase 0: 5 req/s, 100 burst, 1000/день.
 package api
 
 import (
@@ -25,7 +17,7 @@ type Client struct {
 
 func NewClient(apiKey string) *Client {
 	return &Client{
-		httpClient: &http.Client{Timeout: 10 * time.Second},
+		httpClient: &http.Client{Timeout: 15 * time.Second},
 		apiKey:     apiKey,
 	}
 }
@@ -53,36 +45,122 @@ func (c *Client) doRequest(ctx context.Context, path string, dest any) error {
 	return nil
 }
 
-type Unit struct {
-	ID          string `json:"_id"`
-	Name        string `json:"name"`
-	MythiumCost string `json:"mythiumCost"`
-	GoldCost    string `json:"goldcost"`
-	HP          string `json:"hp"`
-	UnitClass   string `json:"unitClass"`
+func (c *Client) GetUnitByName(ctx context.Context, name string, version string) (*UnitStats, error) {
+	path := "/units/byName/" + name
+	if version != "" {
+		path += "?version=" + version
+	}
+	var u UnitStats
+	if err := c.doRequest(ctx, path, &u); err != nil {
+		return nil, err
+	}
+	return &u, nil
 }
 
-func (c *Client) GetUnitsByVersion(ctx context.Context, version string) ([]Unit, error) {
-	var units []Unit
-	if err := c.doRequest(ctx, "/units/byVersion/"+version, &units); err != nil {
-		return nil, fmt.Errorf("get units: %w", err)
+func (c *Client) GetUnitsByVersion(ctx context.Context, version string, limit, offset int) ([]UnitStats, error) {
+	path := fmt.Sprintf("/units/byVersion/%s?limit=%d&offset=%d", version, limit, offset)
+	var units []UnitStats
+	if err := c.doRequest(ctx, path, &units); err != nil {
+		return nil, err
 	}
 	return units, nil
 }
 
-func (c *Client) GetMatchHistory(ctx context.Context, playerID string, limit, offset int) ([]Match, error) {
-	path := fmt.Sprintf("/players/matchHistory/%s?includeDetails=true&limit=%d&offset=%d", playerID, limit, offset)
+func (c *Client) GetPlayerByName(ctx context.Context, name string) (*Player, error) {
+	var players []Player
+	if err := c.doRequest(ctx, "/players/byName/"+name, &players); err != nil {
+		return nil, err
+	}
+	if len(players) == 0 {
+		return nil, fmt.Errorf("player %q not found", name)
+	}
+	return &players[0], nil
+}
+
+func (c *Client) GetPlayerByID(ctx context.Context, id string) (*Player, error) {
+	var players []Player
+	if err := c.doRequest(ctx, "/players/byId/"+id, &players); err != nil {
+		return nil, err
+	}
+	if len(players) == 0 {
+		return nil, fmt.Errorf("player %q not found", id)
+	}
+	return &players[0], nil
+}
+
+func (c *Client) GetPlayerStats(ctx context.Context, id string) (*Stats, error) {
+	var s Stats
+	if err := c.doRequest(ctx, "/players/stats/"+id, &s); err != nil {
+		return nil, err
+	}
+	return &s, nil
+}
+
+func (c *Client) GetTopPlayers(ctx context.Context, sortBy string, limit, offset int) ([]Stats, error) {
+	if sortBy == "" {
+		sortBy = "overallElo"
+	}
+	path := fmt.Sprintf("/players/stats?sortBy=%s&limit=%d&offset=%d&sortDirection=-1", sortBy, limit, offset)
+	var stats []Stats
+	if err := c.doRequest(ctx, path, &stats); err != nil {
+		return nil, err
+	}
+	return stats, nil
+}
+
+func (c *Client) GetMatchHistory(ctx context.Context, playerID string, limit, offset int, includeDetails bool) ([]Match, error) {
+	path := fmt.Sprintf("/players/matchHistory/%s?limit=%d&offset=%d", playerID, limit, offset)
+	if includeDetails {
+		path += "&includeDetails=true"
+	}
 	var matches []Match
 	if err := c.doRequest(ctx, path, &matches); err != nil {
-		return nil, fmt.Errorf("get match history: %w", err)
+		return nil, err
 	}
 	return matches, nil
 }
 
-type Match struct {
-	ID          string `json:"_id"`
-	Version     string `json:"version"`
-	QueueType   string `json:"queueType"`
-	EndingWave  int    `json:"endingWave"`
-	GameLength  int    `json:"gameLength"`
+func (c *Client) GetMatchByID(ctx context.Context, id string, includeDetails bool) (*Match, error) {
+	path := "/games/byId/" + id
+	if includeDetails {
+		path += "?includeDetails=true"
+	}
+	var m Match
+	if err := c.doRequest(ctx, path, &m); err != nil {
+		return nil, err
+	}
+	return &m, nil
+}
+
+func (c *Client) GetMatchesByFilter(ctx context.Context, version string, limit, offset int, includeDetails bool) ([]Match, error) {
+	path := fmt.Sprintf("/games?limit=%d&offset=%d", limit, offset)
+	if version != "" {
+		path += "&version=" + version
+	}
+	if includeDetails {
+		path += "&includeDetails=true"
+	}
+	var matches []Match
+	if err := c.doRequest(ctx, path, &matches); err != nil {
+		return nil, err
+	}
+	return matches, nil
+}
+
+func (c *Client) GetWaves(ctx context.Context, limit, offset int) ([]Wave, error) {
+	path := fmt.Sprintf("/info/waves/%d/%d", offset, limit)
+	var waves []Wave
+	if err := c.doRequest(ctx, path, &waves); err != nil {
+		return nil, err
+	}
+	return waves, nil
+}
+
+func (c *Client) GetLegions(ctx context.Context, limit, offset int, playable bool) ([]Legion, error) {
+	path := fmt.Sprintf("/info/legions/%d/%d?playable=%t", offset, limit, playable)
+	var legions []Legion
+	if err := c.doRequest(ctx, path, &legions); err != nil {
+		return nil, err
+	}
+	return legions, nil
 }
