@@ -8,100 +8,98 @@ async function fetchState() {
   }
 }
 
+function buildUnitCard(u, gold, supply, supplyCap, mythium) {
+  const div = document.createElement('div');
+  div.className = 'unit-card';
+  const canAfford = gold >= (u.costGold || 0)
+    && (supplyCap - supply) >= (u.costSupply || 0)
+    && u.stacks > 0;
+  if (!canAfford) div.className += ' dim';
+
+  const nameSpan = document.createElement('span');
+  nameSpan.className = 'u-name';
+  nameSpan.textContent = u.name || '?';
+
+  const btn = document.createElement('button');
+  btn.className = 'action-btn';
+  btn.textContent = 'Stav';
+  btn.disabled = !canAfford;
+
+  const info = document.createElement('span');
+  info.className = 'u-info';
+  const parts = [];
+  if (u.costGold > 0) parts.push(u.costGold + 'g');
+  if (u.costMythium > 0) parts.push(u.costMythium + 'm');
+  if (u.costSupply > 0) parts.push(u.costSupply + 's');
+  if (u.stacks > 0) parts.push('x' + u.stacks);
+  info.textContent = parts.join(' ') || '';
+
+  div.appendChild(nameSpan);
+  div.appendChild(info);
+  div.appendChild(btn);
+  return div;
+}
+
 function updateUI(data) {
   const state = data.state || data;
 
   document.getElementById('mythium').textContent = state.mythium ?? '—';
+  document.getElementById('gold').textContent = state.gold ?? '—';
   document.getElementById('income').textContent = state.income ?? '—';
   document.getElementById('wave').textContent = state.wave ?? '—';
+  document.getElementById('phase').textContent = state.phase === 'fighting' ? 'FIGHT' : 'Bild';
 
   const timer = state.waveTimer;
   if (timer != null) {
     const m = Math.floor(timer / 60);
     const s = timer % 60;
-    document.getElementById('timer').textContent = `${m}:${s.toString().padStart(2, '0')}`;
+    document.getElementById('timer').textContent = m + ':' + (s < 10 ? '0' : '') + s;
   } else {
     document.getElementById('timer').textContent = '—';
   }
 
-  document.getElementById('kingHp').textContent = state.kingHp != null ? Math.round(state.kingHp) + '%' : '—';
-  document.getElementById('enemyKingHp').textContent = state.enemyKingHp != null ? Math.round(state.enemyKingHp) + '%' : '—';
-  document.getElementById('gold').textContent = state.gold ?? '—';
   document.getElementById('supply').textContent = (state.supply != null ? state.supply : '—') + '/' + (state.supplyCap ?? '—');
 
-  // Hand units
   const handEl = document.getElementById('handUnits');
   handEl.innerHTML = '';
   if (state.hand && state.hand.length > 0) {
-    state.hand.forEach(u => {
-      const div = document.createElement('div');
-      div.className = 'unit-card';
-      const affordable = state.gold >= (u.costGold || 0) && (state.supplyCap - state.supply) >= (u.costSupply || 0) && u.stacks > 0;
-      if (!affordable) div.className += ' dim';
-      div.innerHTML = `<span class="u-name">${u.name || '?'}</span><span class="u-stock">x${u.stacks ?? 1}</span>`;
-      if (u.costGold > 0) div.innerHTML += `<span class="u-cost"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='%23ffcc00'/%3E%3C/svg%3E" style="width:10px;height:10px">${u.costGold}</span>`;
-      handEl.appendChild(div);
+    state.hand.forEach(function(u) {
+      handEl.appendChild(buildUnitCard(u, state.gold, state.supply, state.supplyCap, state.mythium));
     });
   } else {
-    handEl.innerHTML = '<div class="dim">Нет данных</div>';
+    handEl.innerHTML = '<div class="dim" style="padding:8px">Net dannyh</div>';
   }
 
-  // Field units
-  const fieldEl = document.getElementById('fieldUnits');
-  fieldEl.innerHTML = '';
-  if (state.fieldUnits) {
-    const ids = Object.keys(state.fieldUnits);
-    if (ids.length > 0) {
-      ids.forEach(id => {
-        const u = state.fieldUnits[id];
-        const div = document.createElement('div');
-        div.className = 'unit-card field';
-        div.innerHTML = `<span class="u-name">#${id}</span><span class="u-hp">❤${Math.round(u.hp)}</span>`;
-        fieldEl.appendChild(div);
-      });
-    } else {
-      fieldEl.innerHTML = '<div class="dim">Поле пусто</div>';
-    }
-  }
-
-  // Mercenaries
   const mercEl = document.getElementById('mercs');
   mercEl.innerHTML = '';
   if (state.mercenaries && state.mercenaries.length > 0) {
-    state.mercenaries.forEach(m => {
-      const div = document.createElement('div');
-      div.className = 'unit-card dim';
-      const canBuy = state.mythium >= (m.costMythium || 0);
-      if (canBuy) div.className = 'unit-card';
-      div.innerHTML = `<span class="u-name">${m.name || '?'}</span>`;
-      if (m.costMythium > 0) div.innerHTML += `<span class="u-cost">🧪${m.costMythium}</span>`;
-      mercEl.appendChild(div);
+    state.mercenaries.forEach(function(m) {
+      mercEl.appendChild(buildUnitCard(m, state.gold, state.supply, state.supplyCap, state.mythium));
     });
   } else {
-    mercEl.innerHTML = '<div class="dim">Нет данных</div>';
+    mercEl.innerHTML = '<div class="dim" style="padding:8px">Net dannyh</div>';
   }
 
-  // Recommendations
   const recsEl = document.getElementById('recommendations');
   recsEl.innerHTML = '';
-  const recs = data.recommendations || [];
+  var recs = data.recommendations || [];
   if (recs.length > 0) {
-    recs.forEach(r => {
-      const li = document.createElement('li');
-      const badge = document.createElement('span');
-      badge.className = 'badge';
-      badge.textContent = r.action || r.kind || '';
+    recs.forEach(function(r) {
+      var li = document.createElement('li');
+      var badge = document.createElement('span');
+      badge.className = 'badge badge-' + (r.action || 'info');
+      badge.textContent = r.action || r.kind || '?';
       li.appendChild(badge);
       li.appendChild(document.createTextNode(r.message || r.explanation || ''));
       recsEl.appendChild(li);
     });
   } else {
-    recsEl.innerHTML = '<li style="color:#8b949e">Нет данных</li>';
+    recsEl.innerHTML = '<li class="dim">Net dannyh</li>';
   }
 }
 
 async function tick() {
-  const data = await fetchState();
+  var data = await fetchState();
   if (data) updateUI(data);
 }
 

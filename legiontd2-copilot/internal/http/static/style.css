@@ -15,10 +15,6 @@ header {
   margin-bottom: 16px;
 }
 h1 { font-size: 22px; font-weight: 600; color: #58a6ff; }
-.status { font-size: 13px; padding: 2px 10px; border-radius: 10px; background: #21262d; }
-.status.ok { background: #1a7f37; color: #fff; }
-.status.warn { background: #d29922; color: #fff; }
-.status.err { background: #da3633; color: #fff; }
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -44,22 +40,39 @@ h1 { font-size: 22px; font-weight: 600; color: #58a6ff; }
   min-width: 0;
 }
 .panel h2 { font-size: 13px; color: #58a6ff; margin-bottom: 8px; }
-.unit-list { display: flex; flex-direction: column; gap: 3px; max-height: 200px; overflow-y: auto; }
+.unit-list { display: flex; flex-direction: column; gap: 3px; max-height: 300px; overflow-y: auto; }
 .unit-card {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 8px;
+  padding: 5px 8px;
   background: #21262d;
-  border-radius: 4px;
+  border: 1px solid #30363d;
+  border-radius: 6px;
   font-size: 12px;
 }
 .unit-card.dim { opacity: 0.45; }
-.unit-card.field { border-left: 2px solid #1a7f37; }
-.u-name { font-weight: 600; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.u-stock { color: #8b949e; font-size: 11px; }
-.u-cost { color: #d29922; font-size: 11px; white-space: nowrap; }
-.u-hp { color: #da3633; font-size: 11px; }
+.u-name { font-weight: 600; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.u-info { color: #8b949e; font-size: 10px; white-space: nowrap; }
+.action-btn {
+  padding: 2px 10px;
+  border: 1px solid #58a6ff;
+  background: #1f3a5f;
+  color: #58a6ff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.action-btn:disabled {
+  border-color: #30363d;
+  background: #21262d;
+  color: #484f58;
+  cursor: default;
+}
+.action-btn:not(:disabled):hover { background: #264773; }
 .advice {
   background: #161b22;
   border: 1px solid #30363d;
@@ -86,4 +99,17 @@ h1 { font-size: 22px; font-weight: 600; color: #58a6ff; }
   text-transform: uppercase;
   background: #30363d;
   color: #e6edf3;
+  white-space: nowrap;
 }
+.badge-save_mythium { background:#d29922 !important; color:#000 !important; }
+.badge-build_workers { background:#1a7f37 !important; color:#fff !important; }
+.badge-build_units { background:#58a6ff !important; color:#fff !important; }
+.badge-send_mercs { background:#da3633 !important; color:#fff !important; }
+.badge-upgrade_king { background:#b088f5 !important; color:#fff !important; }
+.badge-counter_wave { background:#f78166 !important; color:#fff !important; }
+.badge-wave_info { background:#8b949e !important; color:#fff !important; }
+.badge-save_gold { background:#484f58 !important; color:#fff !important; }
+.badge-tip { background:#1f3a5f !important; color:#58a6ff !important; }
+.badge-hold { background:#30363d !important; color:#8b949e !important; }
+.badge-fight { background:#da3633 !important; color:#fff !important; }
+.advice li.dim { color:#8b949e; }
