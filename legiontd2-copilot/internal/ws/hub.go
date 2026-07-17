@@ -12,32 +12,75 @@ import (
 
 var upgrader = websocket.Upgrader{
 	CheckOrigin:     func(r *http.Request) bool { return true },
-	ReadBufferSize:  1024,
-	WriteBufferSize: 1024,
+	ReadBufferSize:  4096,
+	WriteBufferSize: 4096,
 }
 
-type GameState struct {
-	Mythium              int     `json:"mythium"`
-	Gold                 int     `json:"gold"`
-	Supply               int     `json:"supply"`
-	SupplyCap            int     `json:"supplyCap"`
-	Income               int     `json:"income"`
-	MythiumGatherRate    float64 `json:"mythiumGatherRate"`
-	EstimatedMythium     int     `json:"estimatedMythium"`
-	Wave                 int     `json:"wave"`
-	WaveTimer            int     `json:"waveTimer"`
-	KingHP               float64 `json:"kingHp"`
-	EnemyKingHP          float64 `json:"enemyKingHp"`
-	EnemiesRemainingWest int     `json:"enemiesRemainingWest"`
-	EnemiesRemainingEast int     `json:"enemiesRemainingEast"`
-	TimeElapsed          float64 `json:"timeElapsed"`
-	Phase                string  `json:"phase"`
+type HandUnit struct {
+	ActionID    int    `json:"actionId"`
+	Name       string `json:"name"`
+	Icon       string `json:"icon"`
+	CostGold   int    `json:"costGold"`
+	CostMythium int   `json:"costMythium"`
+	CostSupply int    `json:"costSupply"`
+	Stacks     int    `json:"stacks"`
+	Role       string `json:"role"`
+}
+
+type FieldUnit struct {
+	UnitID    int     `json:"unitId"`
+	HP        float64 `json:"hp"`
+	FirstSeen int64   `json:"firstSeen"`
+}
+
+type BuildQueueItem struct {
+	ActionID int `json:"actionId"`
+	Count    int `json:"count"`
+}
+
+type PlayerScore struct {
+	Player int             `json:"player"`
+	Value  json.RawMessage `json:"value"`
+}
+
+type SelectedUnit struct {
+	Name  string  `json:"name"`
+	HP    float64 `json:"hp"`
+	MaxHP float64 `json:"maxHp"`
+	Title string  `json:"title"`
 }
 
 type Recommendation struct {
 	Action   string `json:"action"`
 	Message  string `json:"message"`
 	Priority int    `json:"priority"`
+}
+
+type GameState struct {
+	Mythium              int              `json:"mythium"`
+	Gold                 int              `json:"gold"`
+	Supply               int              `json:"supply"`
+	SupplyCap            int              `json:"supplyCap"`
+	Income               int              `json:"income"`
+	MythiumGatherRate    float64          `json:"mythiumGatherRate"`
+	EstimatedMythium     int              `json:"estimatedMythium"`
+	Wave                 int              `json:"wave"`
+	WaveTimer            int              `json:"waveTimer"`
+	KingHP               float64          `json:"kingHp"`
+	EnemyKingHP          float64          `json:"enemyKingHp"`
+	EnemiesRemainingWest int              `json:"enemiesRemainingWest"`
+	EnemiesRemainingEast int              `json:"enemiesRemainingEast"`
+	TimeElapsed          float64          `json:"timeElapsed"`
+	Phase                string           `json:"phase"`
+
+	Hand         []HandUnit        `json:"hand"`
+	FieldUnits   map[int]FieldUnit `json:"fieldUnits"`
+	BuildQueue   []BuildQueueItem  `json:"buildQueue"`
+	PurchaseQueue []BuildQueueItem `json:"purchaseQueue"`
+	Mercenaries  []HandUnit        `json:"mercenaries"`
+	TownActions  []HandUnit        `json:"townActions"`
+	PlayerScores []PlayerScore     `json:"playerScores"`
+	SelectedUnit *SelectedUnit     `json:"selectedUnit,omitempty"`
 }
 
 type Hub struct {
@@ -48,7 +91,17 @@ type Hub struct {
 }
 
 func NewHub() *Hub {
-	return &Hub{clients: make(map[*websocket.Conn]bool)}
+	return &Hub{
+		clients: make(map[*websocket.Conn]bool),
+		state: GameState{
+			FieldUnits:   make(map[int]FieldUnit),
+			Hand:         make([]HandUnit, 0),
+			BuildQueue:   make([]BuildQueueItem, 0),
+			Mercenaries:  make([]HandUnit, 0),
+			TownActions:  make([]HandUnit, 0),
+			PlayerScores: make([]PlayerScore, 0),
+		},
+	}
 }
 
 func (h *Hub) GetState() GameState {
@@ -60,6 +113,9 @@ func (h *Hub) GetState() GameState {
 func (h *Hub) SetState(s GameState) {
 	h.mu.Lock()
 	defer h.mu.Unlock()
+	if s.FieldUnits == nil {
+		s.FieldUnits = make(map[int]FieldUnit)
+	}
 	h.state = s
 }
 
@@ -107,7 +163,6 @@ func (h *Hub) ServeWS(w http.ResponseWriter, r *http.Request) {
 	h.clients[conn] = true
 	h.mu.Unlock()
 
-	// Send current recs immediately
 	if recs := h.GetRecs(); len(recs) > 0 {
 		msg, _ := json.Marshal(map[string]interface{}{
 			"type": "recommendation",
@@ -146,6 +201,8 @@ func (h *Hub) ServeWS(w http.ResponseWriter, r *http.Request) {
 			var state GameState
 			if err := json.Unmarshal(msg, &state); err == nil {
 				h.SetState(state)
+			} else {
+				slog.Warn("ws unmarshal", "error", err)
 			}
 		}
 	}

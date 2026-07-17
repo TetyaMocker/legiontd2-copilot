@@ -10,33 +10,32 @@
 <div class="container">
   <header>
     <h1>LT2 Copilot</h1>
-    <span class="status" id="status" style="display:none">● WebSocket</span>
+    <span class="status" id="status" style="display:none">● Live</span>
   </header>
 
   <div class="grid">
-    <div class="card">
-      <div class="label">Mythium</div>
-      <div class="value" id="mythium">—</div>
+    <div class="card"><div class="label">Mythium</div><div class="value" id="mythium">—</div></div>
+    <div class="card"><div class="label">Золото</div><div class="value" id="gold">—</div></div>
+    <div class="card"><div class="label">Доход</div><div class="value" id="income">—</div></div>
+    <div class="card"><div class="label">Волна</div><div class="value" id="wave">—</div></div>
+    <div class="card"><div class="label">Таймер</div><div class="value" id="timer">—</div></div>
+    <div class="card"><div class="label">Снабжение</div><div class="value" id="supply">—</div></div>
+    <div class="card"><div class="label">HP короля</div><div class="value" id="kingHp">—</div></div>
+    <div class="card"><div class="label">HP врага</div><div class="value" id="enemyKingHp">—</div></div>
+  </div>
+
+  <div class="panel-row">
+    <div class="panel">
+      <h2>Рука (доступные юниты)</h2>
+      <div id="handUnits" class="unit-list"></div>
     </div>
-    <div class="card">
-      <div class="label">Доход</div>
-      <div class="value" id="income">—</div>
+    <div class="panel">
+      <h2>Поле (размещённые)</h2>
+      <div id="fieldUnits" class="unit-list"></div>
     </div>
-    <div class="card">
-      <div class="label">Волна</div>
-      <div class="value" id="wave">—</div>
-    </div>
-    <div class="card">
-      <div class="label">Таймер</div>
-      <div class="value" id="timer">—</div>
-    </div>
-    <div class="card">
-      <div class="label">HP короля</div>
-      <div class="value" id="kingHp">—</div>
-    </div>
-    <div class="card">
-      <div class="label">HP врага</div>
-      <div class="value" id="enemyKingHp">—</div>
+    <div class="panel">
+      <h2>Наёмники</h2>
+      <div id="mercs" class="unit-list"></div>
     </div>
   </div>
 
