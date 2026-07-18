@@ -14,6 +14,12 @@
 │  └──────────────┘  └──────▲───────┘  └────────────────────┘  │
 │                           │                                   │
 │                     ┌─────┴──────┐                            │
+│                     │  Feature   │                            │
+│                     │  Matrix    │                            │
+│                     │  (7 sec.)  │                            │
+│                     └─────▲──────┘                            │
+│                           │                                   │
+│                     ┌─────┴──────┐                            │
 │                     │ GameState  │                            │
 │                     │   Hub      │                            │
 │                     └─────▲──────┘                            │
@@ -45,7 +51,8 @@
 
 | Component | Responsibility |
 |-----------|---------------|
-| **Go Core** | Orchestrator, business logic (advisor), storage, UI bridge |
+| **Feature Matrix** | Structural AI input: 7 sections (economy, board, available, waves, coverage, context, opponent). Built from GameState. |
+| **Go Core** | Orchestrator, business logic (advisor), Feature Matrix, storage, UI bridge |
 | **Wails UI** | Desktop window, renders game state and recommendations |
 | **SQLite** | Match logs, wave snapshots, recommendations, cached API unit data |
 | **Offline ML** | Python scripts for dataset collection and model training |
