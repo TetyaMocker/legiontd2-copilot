@@ -44,10 +44,12 @@ type PlayerScore struct {
 }
 
 type SelectedUnit struct {
-	Name  string  `json:"name"`
-	HP    float64 `json:"hp"`
-	MaxHP float64 `json:"maxHp"`
-	Title string  `json:"title"`
+	Name        string  `json:"name"`
+	HP          float64 `json:"hp"`
+	MaxHP       float64 `json:"maxHp"`
+	Title       string  `json:"title"`
+	ArmorType   string  `json:"armorType,omitempty"`
+	ArmorDesc   string  `json:"armorTypeDescription,omitempty"`
 }
 
 type Recommendation struct {
@@ -85,12 +87,14 @@ type GameState struct {
 	ActionSample     interface{} `json:"_actionSample,omitempty"`
 	MercActionSample interface{} `json:"_mercActionSample,omitempty"`
 
+	MyPlayerId      int           `json:"myPlayerId,omitempty"`
 	ScoreboardInfo  []interface{} `json:"scoreboardInfo,omitempty"`
 	TeamGoldLeft    int           `json:"teamGoldLeft,omitempty"`
 	TeamGoldRight   int           `json:"teamGoldRight,omitempty"`
 	KingUpgradesLeft  interface{} `json:"kingUpgradesLeft,omitempty"`
 	KingUpgradesRight interface{} `json:"kingUpgradesRight,omitempty"`
 	Moneylender       interface{} `json:"moneylender,omitempty"`
+	EnemyPlayers      []interface{} `json:"enemyPlayers,omitempty"`
 }
 
 type Hub struct {

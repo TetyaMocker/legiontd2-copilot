@@ -113,7 +113,8 @@ var FighterAttack = map[string]AttackType{
 	"Sacred Steed":       AtkNormal,
 	"Elite Archer":       AtkPierce,
 	"Mr Brewpot":         AtkMagic,
-	"Looter":             AtkPierce,
+	"Looter":             AtkNormal,
+	"Pirate Skeleton":    AtkPierce,
 	"Howler":             AtkPierce,
 	"Grarl":              AtkNormal,
 	"Pulsebot":           AtkMagic,
@@ -163,6 +164,129 @@ var MercAttack = map[string]AttackType{
 	"Honey Bear":  AtkMagic,
 }
 
+// FighterArmor maps fighter names to their armor type.
+// Populated from game knowledge; API v2 /units/byName is the source of truth.
+var FighterArmor = map[string]ArmorType{
+	"Proton":             ArmHeavy,
+	"Seadragon":           ArmMedium,
+	"Angler":             ArmMedium,
+	"Warp Wing":          ArmLight,
+	"Fire Lord":          ArmMedium,
+	"Harpy":              ArmLight,
+	"Treant":             ArmHeavy,
+	"Gatling Gun":        ArmLight,
+	"Eggsack":            ArmMedium,
+	"Butcher":            ArmHeavy,
+	"Head Chef":          ArmMedium,
+	"Nightmare":          ArmHeavy,
+	"Doppelganger":       ArmMedium,
+	"Lord Of Death":      ArmMedium,
+	"Hades":              ArmMedium,
+	"Old Hound":          ArmMedium,
+	"Chaos Hound":        ArmLight,
+	"Diabolic":           ArmMedium,
+	"Bone Warrior":       ArmMedium,
+	"Bone Crusher":       ArmHeavy,
+	"Fire Archer":        ArmLight,
+	"Dark Mage":          ArmLight,
+	"Gargoyle":           ArmMedium,
+	"Green Devil":        ArmLight,
+	"Gateguard":          ArmHeavy,
+	"Harbinger":          ArmHeavy,
+	"Bazooka":            ArmLight,
+	"Pyro":               ArmLight,
+	"Zeus":               ArmMedium,
+	"APS":                ArmLight,
+	"MPS":                ArmLight,
+	"Tempest":            ArmLight,
+	"Leviathan":          ArmHeavy,
+	"Berserker":          ArmLight,
+	"Fatalizer":          ArmLight,
+	"Millennium":         ArmMedium,
+	"Doomsday Machine":    ArmHeavy,
+	"Reactor":            ArmHeavy,
+	"Buzz":               ArmLight,
+	"Consort":            ArmMedium,
+	"Ranger":             ArmLight,
+	"Daphne":             ArmLight,
+	"Wileshroom":         ArmMedium,
+	"Canopie":            ArmMedium,
+	"Honeyflower":        ArmMedium,
+	"Deathcap":           ArmMedium,
+	"Antler":             ArmMedium,
+	"Whitemane":          ArmMedium,
+	"Banana Bunk":        ArmMedium,
+	"Banana Haven":       ArmMedium,
+	"Disciple":           ArmMedium,
+	"Starcaller":         ArmMedium,
+	"Fire Elemental":     ArmLight,
+	"Fenix":              ArmLight,
+	"Peewee":             ArmLight,
+	"Veteran":            ArmLight,
+	"Aqua Spirit":        ArmLight,
+	"Rogue Wave":         ArmLight,
+	"Windhawk":           ArmMedium,
+	"Violet":             ArmMedium,
+	"Mudman":             ArmHeavy,
+	"Golem":              ArmFortified,
+	"Pollywog":           ArmLight,
+	"Yozora":             ArmMedium,
+	"Masked Spirit":      ArmMedium,
+	"Sacred Steed":       ArmLight,
+	"Elite Archer":       ArmLight,
+	"Mr Brewpot":         ArmMedium,
+	"Looter":             ArmLight,
+	"Pirate Skeleton":    ArmLight,
+	"Howler":             ArmLight,
+	"Grarl":              ArmHeavy,
+	"Pulsebot":           ArmLight,
+	"Great Boar":         ArmHeavy,
+	"Golden Buckler":     ArmFortified,
+	"Priestess Of The Abyss": ArmMedium,
+	"White Mage":         ArmLight,
+	"Skybot":             ArmLight,
+	"Giga Annihilator":   ArmHeavy,
+	"Undead Dragon":      ArmFortified,
+	"Sand Badger":        ArmMedium,
+	"Pegasus":            ArmMedium,
+	"Sunfang":            ArmMedium,
+	"Deepcoiler":         ArmMedium,
+	"Nightcrawler":       ArmLight,
+	"Tethered Soul":      ArmMedium,
+	"Desert Pilgrim":     ArmMedium,
+	"Soul Gate":          ArmFortified,
+	"Eternal Wanderer":   ArmMedium,
+	"Holy Avenger":       ArmHeavy,
+}
+
+// MercArmor maps mercenary names to their armor type.
+var MercArmor = map[string]ArmorType{
+	"Witch":       ArmLight,
+	"Siege Ram":  ArmHeavy,
+	"Snail":       ArmLight,
+	"Lizard":      ArmLight,
+	"Fiend":       ArmLight,
+	"Brute":       ArmHeavy,
+	"Dragon Turtle": ArmFortified,
+	"Hermit":      ArmMedium,
+	"Dino":        ArmLight,
+	"Safety Mole": ArmLight,
+	"Drake":       ArmMedium,
+	"Mimic":       ArmMedium,
+	"Pack Leader": ArmMedium,
+	"Centaur":     ArmLight,
+	"Four Eyes":   ArmLight,
+	"Shaman":      ArmLight,
+	"Ghost Knight": ArmMedium,
+	"Kraken":      ArmFortified,
+	"Ogre":        ArmHeavy,
+	"Imp":         ArmLight,
+	"Needler":     ArmLight,
+	"Cannoneer":   ArmMedium,
+	"Robo":        ArmHeavy,
+	"Honey Bear":  ArmMedium,
+}
+
 func GetFighterAttack(name string) (AttackType, bool) {
 	at, ok := FighterAttack[name]
 	return at, ok
@@ -170,6 +294,16 @@ func GetFighterAttack(name string) (AttackType, bool) {
 
 func GetMercAttack(name string) (AttackType, bool) {
 	at, ok := MercAttack[name]
+	return at, ok
+}
+
+func GetFighterArmor(name string) (ArmorType, bool) {
+	at, ok := FighterArmor[name]
+	return at, ok
+}
+
+func GetMercArmor(name string) (ArmorType, bool) {
+	at, ok := MercArmor[name]
 	return at, ok
 }
 
@@ -241,4 +375,18 @@ func (a AttackType) String() string {
 		return "Magic"
 	}
 	return ""
+}
+
+func (a ArmorType) String() string {
+	switch a {
+	case ArmLight:
+		return "light"
+	case ArmMedium:
+		return "medium"
+	case ArmHeavy:
+		return "heavy"
+	case ArmFortified:
+		return "fortified"
+	}
+	return "unknown"
 }

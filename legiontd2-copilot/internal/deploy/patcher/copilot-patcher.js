@@ -29,6 +29,7 @@
         enemiesRemainingEast: 0,
         timeElapsed: 0,
         phase: 'unknown',
+        myPlayerId: 0,
         // Hand (available buildings/units)
         hand: [],
         // Units currently on the field (tracked by unit ID)
@@ -36,7 +37,9 @@
         // Queue of units being built
         buildQueue: [],
         // Purchasing queue
-        purchaseQueue: []
+        purchaseQueue: [],
+        // Enemy players info (from refreshEnemyPlayers)
+        enemyPlayers: []
     };
 
     function connect() {
@@ -345,7 +348,9 @@
                     name: properties.fighterName,
                     hp: properties.currentHp,
                     maxHp: properties.maxHp,
-                    title: properties.fighterTitle || ''
+                    title: properties.fighterTitle || '',
+                    armorType: properties.armorType || '',
+                    armorTypeDescription: properties.armorTypeDescription || ''
                 };
                 sendState();
             }
@@ -402,6 +407,19 @@
             gameState.moneylender = { gold: gold, cost: cost, enabled: enabled };
         });
 
+        // ===== My player ID (which player index are we) =====
+        engine.on('refreshMyPlayerId', function (id) {
+            gameState.myPlayerId = id;
+            sendState();
+        });
+
+        // ===== Enemy players (basic info for scoreboard sidebar) =====
+        engine.on('refreshEnemyPlayers', function (players) {
+            if (!players || !Array.isArray(players)) return;
+            gameState.enemyPlayers = players;
+            sendState();
+        });
+
         // ===== Reset on game end =====
         engine.on('refreshIsInGame', function (inGame) {
             if (!inGame) {
@@ -412,6 +430,7 @@
                     wave: 0, waveTimer: 0, kingHp: 0, enemyKingHp: 0,
                     enemiesRemainingWest: 0, enemiesRemainingEast: 0,
                     timeElapsed: 0, phase: 'unknown',
+                    myPlayerId: 0,
                     hand: [],
                     fieldUnits: {},
                     buildQueue: [],
@@ -423,7 +442,8 @@
                     scoreboardInfo: [],
                     teamGoldLeft: 0, teamGoldRight: 0,
                     kingUpgradesLeft: null, kingUpgradesRight: null,
-                    moneylender: null
+                    moneylender: null,
+                    enemyPlayers: []
                 };
                 sendState();
             }

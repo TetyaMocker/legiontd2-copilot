@@ -1,7 +1,9 @@
 package matrix
 
 import (
+	"fmt"
 	"sort"
+	"strings"
 
 	"github.com/yourname/legiontd2-copilot/internal/unitdata"
 	"github.com/yourname/legiontd2-copilot/internal/wavedata"
@@ -57,6 +59,7 @@ type HandUnitInfo struct {
 	SupplyCost int    `json:"supplyCost"`
 	Role       string `json:"role"`
 	DamageType string `json:"damageType"`
+	ArmorType  string `json:"armorType"`
 	Stacks     int    `json:"stacks"`
 	Affordable bool   `json:"affordable"`
 }
@@ -112,6 +115,15 @@ type OpponentPlayer struct {
 	SupplyCap   int    `json:"supplyCap"`
 	FighterVal  int    `json:"fighterValue"`
 	FieldUnits  int    `json:"fieldUnits"`
+	GridUnits   []GridUnit `json:"gridUnits,omitempty"`
+}
+
+type GridUnit struct {
+	Name       string  `json:"name"`
+	DamageType string  `json:"damageType"`
+	ArmorType  string  `json:"armorType"`
+	X          float64 `json:"x"`
+	Y          float64 `json:"y"`
 }
 
 type OpponentSummary struct {
@@ -120,6 +132,9 @@ type OpponentSummary struct {
 	AvgMythium      int        `json:"avgMythium"`
 	AvgIncome       int        `json:"avgIncome"`
 	TotalFighterVal int        `json:"totalFighterValue"`
+	ArmorBreakdown  map[string]int `json:"armorBreakdown,omitempty"`
+	AtkBreakdown    map[string]int `json:"atkBreakdown,omitempty"`
+	Recommendation  string        `json:"recommendation,omitempty"`
 }
 
 type FeatureMatrix struct {
@@ -176,6 +191,20 @@ func unitDamage(name string, isMerc bool) string {
 	return at.String()
 }
 
+func unitArmor(name string, isMerc bool) string {
+	var at unitdata.ArmorType
+	var ok bool
+	if isMerc {
+		at, ok = unitdata.GetMercArmor(name)
+	} else {
+		at, ok = unitdata.GetFighterArmor(name)
+	}
+	if !ok {
+		return "unknown"
+	}
+	return at.String()
+}
+
 func buildBoard(s ws.GameState) BoardAnalysis {
 	b := BoardAnalysis{}
 	for _, fu := range s.FieldUnits {
@@ -192,6 +221,7 @@ func buildAvailable(s ws.GameState) AvailableAnalysis {
 	a := AvailableAnalysis{}
 	for _, u := range s.Hand {
 		dt := unitDamage(u.Name, false)
+		at := unitArmor(u.Name, false)
 		aff := u.Stacks > 0 && s.Gold >= u.CostGold && u.CostGold > 0 && (s.SupplyCap-s.Supply) >= u.CostSupply
 		a.Fighters = append(a.Fighters, HandUnitInfo{
 			Name:       u.Name,
@@ -200,12 +230,14 @@ func buildAvailable(s ws.GameState) AvailableAnalysis {
 			SupplyCost: u.CostSupply,
 			Role:       u.Role,
 			DamageType: dt,
+			ArmorType:  at,
 			Stacks:     u.Stacks,
 			Affordable: aff,
 		})
 	}
 	for _, m := range s.Mercenaries {
 		dt := unitDamage(m.Name, true)
+		at := unitArmor(m.Name, true)
 		aff := m.Stacks > 0 && s.Mythium >= m.CostMythium && m.CostMythium > 0 && (s.SupplyCap-s.Supply) >= m.CostSupply
 		a.Mercs = append(a.Mercs, HandUnitInfo{
 			Name:       m.Name,
@@ -214,6 +246,7 @@ func buildAvailable(s ws.GameState) AvailableAnalysis {
 			SupplyCost: m.CostSupply,
 			Role:       m.Role,
 			DamageType: dt,
+			ArmorType:  at,
 			Stacks:     m.Stacks,
 			Affordable: aff,
 		})
@@ -411,14 +444,11 @@ func buildOpponent(s ws.GameState) OpponentAnalysis {
 	if len(s.ScoreboardInfo) == 0 {
 		return oa
 	}
-	// In 2v2: players 0&1 = our team (left), players 2&3 = enemy team (right)
-	// ScoreboardInfo array index usually follows player number order
 	for i, p := range s.ScoreboardInfo {
 		pm, ok := p.(map[string]interface{})
 		if !ok {
 			continue
 		}
-		// Players 2+ are opponents (right team)
 		if i < 2 {
 			continue
 		}
@@ -432,27 +462,178 @@ func buildOpponent(s ws.GameState) OpponentAnalysis {
 			SupplyCap: getInt(pm, "supplyCap"),
 			FighterVal: getInt(pm, "value"),
 		}
-		// Count field units from grid
+		// Parse grid — extract unit names from icons, look up armor/attack
 		if g, ok := pm["grid"].([]interface{}); ok {
 			pl.FieldUnits = len(g)
+			for _, entry := range g {
+				gu := parseGridEntry(entry)
+				if gu != nil {
+					pl.GridUnits = append(pl.GridUnits, *gu)
+				}
+			}
 		}
 		oa.Players = append(oa.Players, pl)
 	}
-	// Build summary
+	// Build summary + recommendation
 	if len(oa.Players) > 0 {
+		armorCount := map[string]int{}
+		atkCount := map[string]int{}
+		totalFUs := 0
+		totalVal := 0
+		totalGold := 0
+		totalMyth := 0
+		totalIncome := 0
+
 		for _, pl := range oa.Players {
-			oa.Summary.TotalFieldUnits += pl.FieldUnits
-			oa.Summary.AvgGold += pl.Gold
-			oa.Summary.AvgMythium += pl.Mythium
-			oa.Summary.AvgIncome += pl.Income
-			oa.Summary.TotalFighterVal += pl.FighterVal
+			totalFUs += pl.FieldUnits
+			totalVal += pl.FighterVal
+			totalGold += pl.Gold
+			totalMyth += pl.Mythium
+			totalIncome += pl.Income
+			for _, gu := range pl.GridUnits {
+				armorCount[gu.ArmorType]++
+				atkCount[gu.DamageType]++
+			}
 		}
 		n := len(oa.Players)
-		oa.Summary.AvgGold /= n
-		oa.Summary.AvgMythium /= n
-		oa.Summary.AvgIncome /= n
+		oa.Summary = OpponentSummary{
+			TotalFieldUnits: totalFUs,
+			AvgGold:         totalGold / n,
+			AvgMythium:      totalMyth / n,
+			AvgIncome:       totalIncome / n,
+			TotalFighterVal: totalVal,
+			ArmorBreakdown:  armorCount,
+			AtkBreakdown:    atkCount,
+		}
+		// Recommend mercs based on most common enemy armor
+		oa.Summary.Recommendation = recommendMercs(armorCount, s.Mercenaries)
 	}
 	return oa
+}
+
+func parseGridEntry(entry interface{}) *GridUnit {
+	m, ok := entry.(map[string]interface{})
+	if !ok {
+		return nil
+	}
+	// Extract unit name from icon path: "Icons/EternalWanderer.png" → "Eternal Wanderer"
+	img := getStr(m, "image")
+	name := iconToName(img)
+	if name == "" {
+		return nil
+	}
+	// Determine if unit is a fighter or merc (opponent grid shows fighters)
+	dt := unitDamage(name, false)
+	at := unitArmor(name, false)
+	// If not found as fighter, try merc
+	if dt == "unknown" {
+		dt = unitDamage(name, true)
+	}
+	if at == "unknown" {
+		at = unitArmor(name, true)
+	}
+	x := getFloat(m, "x")
+	y := getFloat(m, "y")
+	return &GridUnit{
+		Name:       name,
+		DamageType: dt,
+		ArmorType:  at,
+		X:          x,
+		Y:          y,
+	}
+}
+
+func iconToName(icon string) string {
+	if icon == "" {
+		return ""
+	}
+	// Extract filename: "Icons/EternalWanderer.png" → "EternalWanderer"
+	name := icon
+	// Remove directory
+	for i := len(name) - 1; i >= 0; i-- {
+		if name[i] == '/' || name[i] == '\\' {
+			name = name[i+1:]
+			break
+		}
+	}
+	// Remove extension
+	if idx := strings.LastIndex(name, "."); idx >= 0 {
+		name = name[:idx]
+	}
+	if name == "" {
+		return ""
+	}
+	// Split CamelCase: "EternalWanderer" → "Eternal Wanderer"
+	result := ""
+	for i, r := range name {
+		if i > 0 && r >= 'A' && r <= 'Z' && name[i-1] >= 'a' && name[i-1] <= 'z' {
+			result += " "
+		}
+		result += string(r)
+	}
+	return result
+}
+
+func getFloat(m map[string]interface{}, key string) float64 {
+	v, ok := m[key]
+	if !ok || v == nil {
+		return 0
+	}
+	f, _ := v.(float64)
+	return f
+}
+
+func recommendMercs(armorCount map[string]int, mercs []ws.HandUnit) string {
+	// Find most common armor type among opponent's units
+	bestArmor := ""
+	bestCount := 0
+	for armor, count := range armorCount {
+		if count > bestCount {
+			bestCount = count
+			bestArmor = armor
+		}
+	}
+	if bestArmor == "" || bestCount == 0 {
+		return ""
+	}
+
+	// Map armor → best attack type
+	var needAtk unitdata.AttackType
+	switch bestArmor {
+	case "light":
+		needAtk = unitdata.AtkPierce // 1.2x vs light
+	case "medium":
+		needAtk = unitdata.AtkMagic // 1.25x vs medium
+	case "heavy":
+		needAtk = unitdata.AtkNormal // 1.15x vs heavy
+	case "fortified":
+		needAtk = unitdata.AtkNormal // 1.15x vs fortified, Magic is 1.05x
+	default:
+		return ""
+	}
+	needAtkStr := needAtk.String()
+
+	// Find which mercs we have that deal this damage type
+	var haveMercs []string
+	for i := 0; i < len(mercs); i++ {
+		if mercs[i].Stacks <= 0 {
+			continue
+		}
+		at, ok := unitdata.GetMercAttack(mercs[i].Name)
+		if ok && at == needAtk {
+			haveMercs = append(haveMercs, mercs[i].Name)
+		}
+	}
+
+	// Build recommendation text
+	atkLabel := needAtkStr
+	rec := fmt.Sprintf("У оппонента %d юнитов с бронёй %s. Рекомендуем %s урон", bestCount, bestArmor, atkLabel)
+	if len(haveMercs) > 0 {
+		rec += ". Есть в руке: " + joinStrings(haveMercs)
+	} else {
+		rec += ". Нет подходящих мерков в руке"
+	}
+	return rec
 }
 
 func getStr(m map[string]interface{}, key string) string {
